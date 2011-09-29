@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Net;
-using System.Web;
-using System.Security.Cryptography.X509Certificates;
 using System.Reflection;
 using log4net;
 
@@ -18,11 +15,6 @@ namespace PayPal.Manager
     /// </summary>
     public class CredentialManager
     {
-        /// <summary>
-        /// To read the certificate .
-        /// </summary>
-        private X509Certificate x509;
-
         private Dictionary<string, ICredential> cachedCredentials = new Dictionary<string, ICredential>();
 
         private static readonly ILog log = LogManager.GetLogger(typeof(CredentialManager));
@@ -41,51 +33,6 @@ namespace PayPal.Manager
 
         private CredentialManager()
         { }
-
-        /// <summary>
-        /// Load Credentials
-        /// </summary>
-        /// <param name="objRequest"></param>
-        /// <param name="apiProfile"></param>
-        /// <returns></returns>
-        public HttpWebRequest SetAuthenticationParams(HttpWebRequest objRequest, string apiUsername)
-        {
-            // Load and validate credentials
-            ICredential apiCredentials = GetCredentials(apiUsername);
-            validateCredentials(apiCredentials);
-
-            // Adding Credential and payload request/resposne information to the HttpWebRequest obejct's header
-            objRequest.Headers.Add(BaseConstants.XPAYPALSECURITYUSERID, apiCredentials.APIUsername);
-            objRequest.Headers.Add(BaseConstants.XPAYPALSECURITYPASSWORD, apiCredentials.APIPassword);
-            objRequest.Headers.Add(BaseConstants.XPAYPALAPPLICATIONID, apiCredentials.ApplicationID);            
-            objRequest.Headers.Add(BaseConstants.XPAYPALREQUESTDATAFORMAT, BaseConstants.RequestDataformat);
-            objRequest.Headers.Add(BaseConstants.XPAYPALRESPONSEDATAFORMAT, BaseConstants.ResponseDataformat);
-
-            /// Add the certificate to HttpWebRequest obejct if Profile is certificate enabled
-            if ((apiCredentials is SignatureCredential))
-            {             
-                objRequest.Headers.Add(BaseConstants.XPAYPALSECURITYSIGNATURE, ((SignatureCredential)apiCredentials).APISignature);
-            }
-            else
-            {   
-                // Load the certificate into an X509Certificate2 object.
-                if (((CertificateCredential)apiCredentials).PrivateKeyPassword.Trim() == string.Empty)
-                {
-                    x509 = new X509Certificate2(((CertificateCredential)apiCredentials).CertificateFile);
-                }
-                else
-                {
-                    x509 = new X509Certificate2(((CertificateCredential)apiCredentials).CertificateFile, ((CertificateCredential)apiCredentials).PrivateKeyPassword);
-                }
-                objRequest.ClientCertificates.Add(x509);
-
-            }
-
-            // This header is used to track the calls from PayPal SDKs            
-            objRequest.Headers.Add(BaseConstants.XPAYPALREQUESTSOURCE, BaseConstants.XPAYPALSOURCE);
-
-            return objRequest;
-        }
 
         private string getDefaultAccountName()
         {
@@ -149,7 +96,7 @@ namespace PayPal.Manager
         /// Validate API Credentials
         /// </summary>
         /// <param name="apiCredentials"></param>
-        private void validateCredentials(ICredential apiCredentials)
+        public void validateCredentials(ICredential apiCredentials)
         {
             if (apiCredentials.APIUsername == null || apiCredentials.APIUsername == "")
             {

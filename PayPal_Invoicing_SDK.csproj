@@ -41,21 +41,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasePayPalService.cs" />
+    <Compile Include="Authentication\AuthenticationHandler.cs" />
     <Compile Include="Exception\ConfigException.cs" />
     <Compile Include="Exception\ConnectionException.cs" />
     <Compile Include="Exception\InvalidCredentialException.cs" />
     <Compile Include="Exception\MissingCredentialException.cs" />
-    <Compile Include="Invoice\InvoiceService.cs" />
-    <Compile Include="Invoice\InvoiceStubs.cs" />
+    <Compile Include="Exception\OAuthException.cs" />
     <Compile Include="Manager\SDKConfigHandler.cs" />
     <Compile Include="Manager\ConfigManager.cs" />
     <Compile Include="Manager\ConnectionManager.cs" />
     <Compile Include="Manager\CredentialManager.cs" />
     <Compile Include="APIService.cs" />
-    <Compile Include="Credential\SignatureCredential.cs" />
+    <Compile Include="Authentication\SignatureCredential.cs" />
     <Compile Include="BaseConstants.cs" />
-    <Compile Include="Credential\CertificateCredential.cs" />
-    <Compile Include="Credential\ICredential.cs" />
+    <Compile Include="Authentication\CertificateCredential.cs" />
+    <Compile Include="Authentication\ICredential.cs" />
+    <Compile Include="OAuth\OAuthGenerator.cs" />
+    <Compile Include="OAuth\PayPalURLEncoder.cs" />
     <Compile Include="Util\NVPUtil.cs" />
     <Compile Include="Util\ReadCert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -64,9 +66,7 @@
     <Content Include="lib\log4net.dll" />
     <Content Include="lib\log4net.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="scripts\GenerateNDoc.bat" />
-  </ItemGroup>
+  
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -43,28 +43,54 @@ namespace PayPal
         /// Calls the platform API web service for given payload and returns the response payload.
         /// </summary>
         /// <returns>returns the response payload</returns>
-        public string makeRequest(String method, string requestPayload, string apiUsername)
+        public string makeRequest(string method, string requestPayload, string apiUsername,
+                                    string accessToken, string accessTokenSecret)
         {
 
-            ConfigManager configMgr = ConfigManager.Instance;
-            CredentialManager credMgr = CredentialManager.Instance;
-            string url, responseString = string.Empty;
+            ConfigManager configMgr = ConfigManager.Instance;            
+            string uri, responseString = string.Empty;
+            AuthenticationHandler authHandler = new AuthenticationHandler(apiUsername);
+            // Construct the URL to invoke
+            if (configMgr.GetProperty("binding") != "SOAP")
+            {
+                uri = getAPIEndpoint(method);
 
-            // Constructing the URL to be called from Profile settings
-            // Most of PayPal's APIs include the service method name as part of the URL
-            url = getAPIEndpoint(method);
-            log.Debug("Connecting to " + url);
+            }
+            else
+            {
+                uri = configMgr.GetProperty("endpoint");
+               
+            }
+            log.Debug("Connecting to " + uri);
 
             // Constructing HttpWebRequest object                
-            ConnectionManager conn = ConnectionManager.Instance;
-
-            
-            HttpWebRequest httpRequest = conn.getConnection(url);
+            ConnectionManager conn = ConnectionManager.Instance;            
+            HttpWebRequest httpRequest = conn.getConnection(uri);
             httpRequest.Method = RequestMethod;
 
-            // Set up Headers                
-            credMgr.SetAuthenticationParams(httpRequest, apiUsername);                
-    
+            // Set up Headers
+            
+            if(accessToken != null && accessTokenSecret != null)
+                authHandler.SetOAuthToken(accessToken, accessTokenSecret);
+            authHandler.SetAuthenticationParams(httpRequest, uri);
+            if (configMgr.GetProperty("binding") =="SOAP")
+                requestPayload = authHandler.appendSoapHeaders(requestPayload, accessToken, accessTokenSecret);
+            else
+            {
+                httpRequest.Headers.Add(BaseConstants.XPAYPALREQUESTSOURCE, BaseConstants.XPAYPALSOURCE);
+                httpRequest.Headers.Add(BaseConstants.XPAYPALREQUESTDATAFORMAT, BaseConstants.RequestDataformat);
+                httpRequest.Headers.Add(BaseConstants.XPAYPALRESPONSEDATAFORMAT, BaseConstants.ResponseDataformat);
+                httpRequest.Headers.Add(BaseConstants.XPAYPALDEVICEIPADDRESS, configMgr.GetProperty("IPAddress"));
+            }
+            // This header is used to track the calls from PayPal SDKs            
+            
+            if (log.IsDebugEnabled)
+            {
+                foreach (string headerName in httpRequest.Headers)
+                {
+                    log.Debug(headerName + ":" + httpRequest.Headers[headerName]);
+                }
+            }
             // Adding payLoad to HttpWebRequest object
             using (StreamWriter myWriter = new StreamWriter(httpRequest.GetRequestStream()))
             {
@@ -72,6 +98,7 @@ namespace PayPal
                 log.Debug(requestPayload);                    
             }
 
+            // Fire request. Retry if configured to do so
             int numRetries = (configMgr.GetProperty("requestRetries") != null ) ? 
                 Int32.Parse(configMgr.GetProperty("requestRetries")) : 0;
             int retries = 0;
@@ -79,7 +106,7 @@ namespace PayPal
             do {
                 try
                 {
-                    // calling the plaftform API web service and getting the resoponse
+                    // calling the plaftform API web service and getting the response
                     using (WebResponse response = httpRequest.GetResponse())
                     {
                         using (StreamReader sr = new StreamReader(response.GetResponseStream()))
@@ -111,6 +138,7 @@ namespace PayPal
         }
 
         private string getAPIEndpoint(string method) {
+            // PayPal's APIs include the service method name as part of the URL
             ConfigManager configMgr = ConfigManager.Instance;
             return configMgr.GetProperty("endpoint") + this.serviceName + '/' + method;
         }
