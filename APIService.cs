@@ -33,10 +33,12 @@ namespace PayPal
                                                 });
 
         private string serviceName;
+        private string serviceVersion;
 
-        public APIService(string serviceName)
+        public APIService(string serviceName, string serviceVersion)
         {
             this.serviceName = serviceName;
+            this.serviceVersion = serviceVersion;
         }
 
         /// <summary>
@@ -67,23 +69,23 @@ namespace PayPal
             ConnectionManager conn = ConnectionManager.Instance;            
             HttpWebRequest httpRequest = conn.getConnection(uri);
             httpRequest.Method = RequestMethod;
-
-            // Set up Headers
             
+            // Set up Headers            
             if(accessToken != null && accessTokenSecret != null)
                 authHandler.SetOAuthToken(accessToken, accessTokenSecret);
             authHandler.SetAuthenticationParams(httpRequest, uri);
-            if (configMgr.GetProperty("binding") =="SOAP")
+            if (configMgr.GetProperty("binding") == "SOAP")
                 requestPayload = authHandler.appendSoapHeaders(requestPayload, accessToken, accessTokenSecret);
             else
             {
-                httpRequest.Headers.Add(BaseConstants.XPAYPALREQUESTSOURCE, BaseConstants.XPAYPALSOURCE);
                 httpRequest.Headers.Add(BaseConstants.XPAYPALREQUESTDATAFORMAT, BaseConstants.RequestDataformat);
                 httpRequest.Headers.Add(BaseConstants.XPAYPALRESPONSEDATAFORMAT, BaseConstants.ResponseDataformat);
                 httpRequest.Headers.Add(BaseConstants.XPAYPALDEVICEIPADDRESS, configMgr.GetProperty("IPAddress"));
             }
-            // This header is used to track the calls from PayPal SDKs            
-            
+            // Add tracking header           
+            httpRequest.Headers.Add(BaseConstants.XPAYPALREQUESTSOURCE, 
+                    BaseConstants.SDK_NAME + "-" + BaseConstants.SDK_VERSION);
+
             if (log.IsDebugEnabled)
             {
                 foreach (string headerName in httpRequest.Headers)
@@ -92,10 +94,17 @@ namespace PayPal
                 }
             }
             // Adding payLoad to HttpWebRequest object
-            using (StreamWriter myWriter = new StreamWriter(httpRequest.GetRequestStream()))
+            try
             {
-                myWriter.Write(requestPayload);                    
-                log.Debug(requestPayload);                    
+                using (StreamWriter myWriter = new StreamWriter(httpRequest.GetRequestStream()))
+                {
+                    myWriter.Write(requestPayload);
+                    log.Debug(requestPayload);
+                }
+            }
+            catch (WebException ex)
+            {
+                throw new ConnectionException(ex.Message);
             }
 
             // Fire request. Retry if configured to do so
@@ -122,6 +131,7 @@ namespace PayPal
                 catch (WebException we)
                 {
                     HttpStatusCode statusCode =  ( (HttpWebResponse) we.Response ).StatusCode;
+                    
                     log.Info("Got " + statusCode.ToString() + " response from server");
                     if (!requiresRetry(we))
                     {
