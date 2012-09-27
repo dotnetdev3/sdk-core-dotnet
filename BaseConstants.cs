@@ -7,6 +7,22 @@ namespace PayPal
 	/// </summary>
 	public class BaseConstants
 	{	
+		/// <summary>
+		/// Modify these values if you want to use your own profile.
+		/// </summary>
+
+		/* 
+		 *                                                                         *
+		 * WARNING: Do not embed plaintext credentials in your application code.   *
+		 * Doing so is insecure and against best practices.                        *
+		 *                                                                         *
+		 * Your API credentials must be handled securely. Please consider          *
+		 * encrypting them for use in any production environment, and ensure       *
+		 * that only authorized individuals may view or modify them.               *
+		 *                                                                         *
+		 */
+               					
+
         public const string XPAYPALREQUESTDATAFORMAT = "X-PAYPAL-REQUEST-DATA-FORMAT";
         public const string XPAYPALRESPONSEDATAFORMAT = "X-PAYPAL-RESPONSE-DATA-FORMAT";
         public const string XPAYPALSERVICEVERSION = "X-PAYPAL-SERVICE-VERSION";        
