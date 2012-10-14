@@ -1,63 +1,104 @@
+using System;
 using System.Text;
 
 namespace PayPal
 {
-	/// <summary>
-	/// Summary description for Constants.
-	/// </summary>
-	public class BaseConstants
-	{	
-		/// <summary>
-		/// Modify these values if you want to use your own profile.
-		/// </summary>
-
-		/* 
-		 *                                                                         *
-		 * WARNING: Do not embed plaintext credentials in your application code.   *
-		 * Doing so is insecure and against best practices.                        *
-		 *                                                                         *
-		 * Your API credentials must be handled securely. Please consider          *
-		 * encrypting them for use in any production environment, and ensure       *
-		 * that only authorized individuals may view or modify them.               *
-		 *                                                                         *
-		 */
-               					
-
-        public const string XPAYPALREQUESTDATAFORMAT = "X-PAYPAL-REQUEST-DATA-FORMAT";
-        public const string XPAYPALRESPONSEDATAFORMAT = "X-PAYPAL-RESPONSE-DATA-FORMAT";
-        public const string XPAYPALSERVICEVERSION = "X-PAYPAL-SERVICE-VERSION";        
-        public const string XPAYPALSECURITYUSERID = "X-PAYPAL-SECURITY-USERID";
-        public const string XPAYPALSECURITYOAUTHSIGN = "X-PAYPAL-AUTHORIZATION";
-        public const string XPAYPALSECURITYCLIENTCERT = "CLIENT-AUTH";
-        public const string XPAYPALSECURITYPASSWORD = "X-PAYPAL-SECURITY-PASSWORD";
-        public const string XPAYPALSECURITYSIGNATURE = "X-PAYPAL-SECURITY-SIGNATURE";
-        public const string XPAYPALMESSAGEPROTOCOL = "X-PAYPAL-MESSAGE-PROTOCOL";
-        public const string XPAYPALAPPLICATIONID = "X-PAYPAL-APPLICATION-ID";
-        public const string XPAYPALDEVICEIPADDRESS = "X-PAYPAL-DEVICE-IPADDRESS";
-        public const string XPAYPALSANDBOXEMAILADDRESS = "X-PAYPAL-SANDBOX-EMAIL-ADDRESS";
-        public const string XPAYPALREQUESTSOURCE = "X-PAYPAL-REQUEST-SOURCE";        
-
-        //Data Request format specified here
-        public const string  RequestDataformat="NV";
-        public const string  ResponseDataformat="NV";
-
+    public static class BaseConstants
+    {
+        // Request Method in HTTP Connection
         public const string REQUESTMETHOD = "POST";
+
+        // Log file
         public const string PAYPALLOGFILE = "PAYPALLOGFILE";
 
         // Default connection timeout in milliseconds
         public const int DEFAULT_TIMEOUT = 3600000;
 
-        // Encoding format to be used for API payloads
+        // Encoding Format
         public static readonly Encoding ENCODING_FORMAT = Encoding.UTF8;
         
-        public const string SDK_NAME = "";
-        public const string SDK_VERSION = "";
+        // Account Prefix
+        public const string ACCCOUT_PREFIX = "acct";
 
-        public class ErrorMessages
+        // Sandbox Email Address
+        public const string SANDBOX_EMAIL_ADDRESS = "Platform.sdk.seller@gmail.com";
+        
+        // SOAP Format
+        public const string SOAP = "SOAP";
+        
+        // NVP Format
+        public const string NVP = "NV";
+        
+        // HTTP Header Constants
+        // PayPal Security UserId Header
+        public const string PAYPAL_SECURITY_USERID_HEADER = "X-PAYPAL-SECURITY-USERID";
+
+        // PayPal Security Password Header
+        public const string PAYPAL_SECURITY_PASSWORD_HEADER = "X-PAYPAL-SECURITY-PASSWORD";
+
+        // PayPal Security Signature Header
+        public const string PAYPAL_SECURITY_SIGNATURE_HEADER = "X-PAYPAL-SECURITY-SIGNATURE";
+
+        // PayPal Platform Authorization Header
+        public const string PAYPAL_AUTHORIZATION_PLATFORM = "X-PAYPAL-AUTHORIZATION";
+
+        // PayPal Merchant Authorization Header
+        public const string PAYPAL_AUTHORIZATION_MERCHANT = "X-PP-AUTHORIZATION";
+
+        // PayPal Application ID Header
+        public const string PAYPAL_APPLICATION_ID = "X-PAYPAL-APPLICATION-ID";
+
+        // PayPal Request Data Header
+        public const string PAYPAL_REQUEST_DATA_FORMAT_HEADER = "X-PAYPAL-REQUEST-DATA-FORMAT";
+
+        // PayPal Request Data Header
+        public const string PAYPAL_RESPONSE_DATA_FORMAT_HEADER = "X-PAYPAL-RESPONSE-DATA-FORMAT";
+
+        // PayPal Request Source Header
+        public const string PAYPAL_REQUEST_SOURCE_HEADER = "X-PAYPAL-REQUEST-SOURCE";
+
+        // Constants key defined for configuration options in application properties
+        // End point
+        public const string END_POINT = "endpoint";
+
+        // HTTP Proxy Address
+        public const string HTTP_PROXY_ADDRESS = "proxyAddress";
+
+        // HTTP Proxy Credential
+        public const string HTTP_PROXY_CREDENTIAL = "proxyCredentials";
+
+        // HTTP Connection Timeout
+        public const string HTTP_CONNECTION_TIMEOUT = "connectionTimeout";
+
+        // HTTP Connection Retry
+        public const string HTTP_CONNECTION_RETRY = "requestRetries";
+
+        // Credential Username suffix
+        public const string CREDENTIAL_USERNAME = "apiUsername";
+
+        // Credential Password suffix
+        public const string CREDENTIAL_PASSWORD = "apiPassword";
+
+        // Credential Application ID
+        public const string CREDENTIAL_APPLICACTIONID = "applicationId";
+
+        // Credential Subject
+        public const string CREDENTIAL_SUBJECT = ".Subject";
+
+        // Credential Signature
+        public const string CREDENTIAL_SIGNATURE = "apiSignature";
+
+        // Credential Certificate Path
+        public const string CREDENTIAL_CERTPATH_SUFFIX = "apiCertificate";
+
+        // Credential Certificate Key
+        public const string CREDENTIAL_CERTKEY_SUFFIX = "privateKeyPassword";
+
+
+        public static class ErrorMessages
         {
-            public const string PROFILE_NULL = "APIProfile cannot be null." ;
+            public const string PROFILE_NULL = "APIProfile cannot be null.";
             public const string PAYLOAD_NULL = "PayLoad cannot be null or empty.";
-
             public const string err_endpoint = "Endpoint cannot be empty.";
             public const string err_username = "API username cannot be empty";
             public const string err_passeword = "API password cannot be empty.";
@@ -66,5 +107,5 @@ namespace PayPal
             public const string err_certificate = "Certificate cannot be empty";
             public const string err_privatekeypassword = "Private Key password cannot be null or empty.";
         }
-	}
+    }
 }

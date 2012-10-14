@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Reflection;
 using log4net;
-
-using PayPal;
 using PayPal.Authentication;
 using PayPal.Exception;
 
@@ -13,27 +7,42 @@ namespace PayPal.Manager
     /// <summary>
     /// Reads API credentials to be used with the application
     /// </summary>
-    public class CredentialManager
+    public sealed class CredentialManager
     {
-        private Dictionary<string, ICredential> cachedCredentials = new Dictionary<string, ICredential>();
-
         private static readonly ILog log = LogManager.GetLogger(typeof(CredentialManager));
 
         /// <summary>
-        /// Singleton instance of CredentialManager
+        /// Singleton instance of ConnectionManager
         /// </summary>
-        private static readonly CredentialManager instance = new CredentialManager();
+        private static readonly CredentialManager singletonInstance = new CredentialManager();
+
+        /// <summary>
+        /// Explicit static constructor to tell C# compiler
+        /// not to mark type as beforefieldinit
+        /// </summary>
+        static CredentialManager() { }
+
+        /// <summary>
+        /// Private Constructor
+        /// </summary>
+        private CredentialManager() { }
+
+
+        /// <summary>
+        /// Gets the Singleton instance of ConnectionManager
+        /// </summary>
         public static CredentialManager Instance
         {
             get
             {
-                return instance;
+                return singletonInstance;
             }
-        }        
+        }
 
-        private CredentialManager()
-        { }
-
+        /// <summary>
+        /// Returns the default Account Name
+        /// </summary>
+        /// <returns></returns>
         private string GetDefaultAccountName()
         {
             ConfigManager configMgr = ConfigManager.Instance;
@@ -45,98 +54,112 @@ namespace PayPal.Manager
             return firstAccount.APIUsername;
         }
 
+        /// <summary>
+        /// Returns the API Credentials
+        /// </summary>
+        /// <param name="apiUserName"></param>
+        /// <returns></returns>
         public ICredential GetCredentials(string apiUserName)
         {
             if (apiUserName == null)
             {
                 apiUserName = GetDefaultAccountName();
             }
-
-            if (this.cachedCredentials.ContainsKey(apiUserName))
+           
+            ICredential credential = null;
+            ConfigManager configManager = ConfigManager.Instance;
+            Account accnt = configManager.GetAccount(apiUserName);
+            if (accnt == null)
             {
-                log.Debug("Returning cached credentials for " + apiUserName);
-                return this.cachedCredentials[apiUserName];
+                throw new MissingCredentialException("Missing credentials for " + apiUserName);
+            }
+            if (!string.IsNullOrEmpty(accnt.APICertificate))
+            {
+                CertificateCredential certCredential = new CertificateCredential(accnt.APIUsername, accnt.APIPassword, accnt.ApplicationId, accnt.APICertificate, accnt.PrivateKeyPassword);
+                if (!string.IsNullOrEmpty(accnt.CertificateSubject))
+                {
+                    SubjectAuthorization subAuthorization = new SubjectAuthorization(accnt.CertificateSubject);
+                    certCredential.ThirdPartyAuthorization = subAuthorization;
+                }
+                credential = certCredential;
             }
             else
             {
-                ICredential pro = null;
-
-                ConfigManager configMgr = ConfigManager.Instance;
-                Account acc = configMgr.GetAccount(apiUserName);
-                if (acc == null)
+                SignatureCredential signCredential = new SignatureCredential(accnt.APIUsername, accnt.APIPassword, accnt.ApplicationId, accnt.APISignature);
+                if (!string.IsNullOrEmpty(accnt.SignatureSubject))
                 {
-                    throw new MissingCredentialException("Missing credentials for " + apiUserName);
+                    SubjectAuthorization subjectAuthorization = new SubjectAuthorization(accnt.SignatureSubject);
+                    signCredential.ThirdPartyAuthorization = subjectAuthorization;
                 }
-                if (!string.IsNullOrEmpty(acc.APICertificate))
-                {
-                    CertificateCredential cred = new CertificateCredential();
-                    cred.APIUsername = acc.APIUsername;
-                    cred.APIPassword = acc.APIPassword;
-                    cred.CertificateFile = acc.APICertificate;
-                    cred.PrivateKeyPassword = acc.PrivateKeyPassword;
-                    cred.ApplicationID = acc.ApplicationId;
+                credential = signCredential;
+            }
+            ValidateCredentials(credential);
+            
+            return credential;            
+        }
 
-                    cred.CertificateSubject = acc.CertificateSubject;
-
-                    pro = cred;
-                }
-                else
-                {
-                    SignatureCredential cred = new SignatureCredential();
-                    cred.APIUsername = acc.APIUsername;
-                    cred.APIPassword = acc.APIPassword;
-                    cred.APISignature = acc.APISignature;
-                    cred.ApplicationID = acc.ApplicationId;
-
-                    cred.SignatureSubject = acc.SignatureSubject;
-
-                    pro = cred;
-                }
-                this.cachedCredentials.Add(apiUserName, pro);
-                return pro;
+        /// <summary>
+        /// Validates the API Credentials
+        /// </summary>
+        /// <param name="apiCredentials"></param>
+        private void ValidateCredentials(ICredential apiCredentials)
+        {
+            if (apiCredentials is SignatureCredential)
+            {
+                SignatureCredential credential = (SignatureCredential)apiCredentials;
+                Validate(credential);
+            }
+            else if (apiCredentials is CertificateCredential)
+            {
+                CertificateCredential credential = (CertificateCredential)apiCredentials;
+                Validate(credential);
             }
         }
 
         /// <summary>
-        /// Validate API Credentials
+        /// Validates the API Credentials
         /// </summary>
         /// <param name="apiCredentials"></param>
-        public void ValidateCredentials(ICredential apiCredentials)
+        private void Validate(SignatureCredential apiCredentials)
         {
-            if (string.IsNullOrEmpty(apiCredentials.APIUsername))
+            if (string.IsNullOrEmpty(apiCredentials.UserName))
             {
                 throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_username);
             }
-            if (string.IsNullOrEmpty(apiCredentials.APIPassword))
+            if (string.IsNullOrEmpty(apiCredentials.Password))
             {
                 throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_passeword);
             }
-            if (string.IsNullOrEmpty(apiCredentials.ApplicationID))
+            if (string.IsNullOrEmpty(((SignatureCredential)apiCredentials).Signature))
             {
-                throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_appid);
+                throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_signature);
+            }
+        }
+
+        /// <summary>
+        /// Validates the API Credentials
+        /// </summary>
+        /// <param name="apiCredentials"></param>
+        private void Validate(CertificateCredential apiCredentials)
+        {
+            if (string.IsNullOrEmpty(apiCredentials.UserName))
+            {
+                throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_username);
+            }
+            if (string.IsNullOrEmpty(apiCredentials.Password))
+            {
+                throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_passeword);
             }
 
-            if ((apiCredentials is SignatureCredential))
+            if (string.IsNullOrEmpty(((CertificateCredential)apiCredentials).CertificateFile))
             {
-                if (string.IsNullOrEmpty(((SignatureCredential)apiCredentials).APISignature))                
-                {
-                    throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_signature);
-                }
-            }
-            else
-            {
-                if (string.IsNullOrEmpty(((CertificateCredential)apiCredentials).CertificateFile))                
-                {
-                    throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_certificate);
-                }
-
-                if (string.IsNullOrEmpty(((CertificateCredential)apiCredentials).PrivateKeyPassword))                
-                {
-                    throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_privatekeypassword);
-                }
-            
+                throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_certificate);
             }
 
-        }        
+            if (string.IsNullOrEmpty(((CertificateCredential)apiCredentials).PrivateKeyPassword))
+            {
+                throw new InvalidCredentialException(BaseConstants.ErrorMessages.err_privatekeypassword);
+            }
+        }      
     }
 }

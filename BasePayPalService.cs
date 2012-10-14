@@ -7,17 +7,14 @@ namespace PayPal
 {
     public class BasePayPalService
     {       
-        private string ServiceName;
-        private string ServiceVersion;
-        private string AccessToken;
-        private string AccessTokenSecret;
-        private string LastRequest;
-        private string LastResponse;
+       private string AccessToken;
+       private string AccessTokenSecret;
+       private string LastRequest;
+       private string LastResponse;
 
-        public BasePayPalService(string serviceName, string serviceVersion)
+        public BasePayPalService()
         {
-            this.ServiceName = serviceName;
-            this.ServiceVersion = serviceVersion;
+           
         }
 
         public void setAccessToken(string accessToken)
@@ -28,6 +25,16 @@ namespace PayPal
         public void setAccessTokenSecret(string accessTokenSecret)
         {
             this.AccessTokenSecret = accessTokenSecret;
+        }
+
+        public string getAccessToken()
+        {
+            return this.AccessToken;
+        }
+
+        public string getAccessTokenSecret()
+        {
+            return this.AccessTokenSecret;
         }
 
         public string getLastRequest()
@@ -43,15 +50,13 @@ namespace PayPal
         /// <summary>
         /// Call method exposed to user
         /// </summary>
-        /// <param name="method"></param>
-        /// <param name="requestPayload"></param>
+        /// <param name="apiCallHandler"></param>
         /// <returns></returns>
-        public string Call(string method, string requestPayload, string apiUserName)
-        {            
-            APIService apiService = new APIService(ServiceName, ServiceVersion);
-            this.LastRequest = requestPayload;
-            this.LastResponse =  apiService.MakeRequest(method, requestPayload, apiUserName, 
-                                    this.AccessToken, this.AccessTokenSecret);
+        public string Call(IAPICallPreHandler apiCallHandler)
+        {
+            APIService apiService = new APIService();
+            this.LastRequest = apiCallHandler.GetPayLoad();
+            this.LastResponse = apiService.MakeRequestUsing(apiCallHandler);
             return this.LastResponse;
         }
     }

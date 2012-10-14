@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Text;
-using System.Xml;
-using PayPal.Exception;
-
 
 namespace PayPal.Manager
 {
@@ -13,10 +7,7 @@ namespace PayPal.Manager
     /// </summary>    
     public class SDKConfigHandler : ConfigurationSection
     {
-
-        public SDKConfigHandler()
-        {
-        }
+        public SDKConfigHandler() { }
 
         private static readonly ConfigurationProperty accountsElement =
              new ConfigurationProperty("accounts", typeof(AccountCollection), null, ConfigurationPropertyOptions.IsRequired);
@@ -41,8 +32,7 @@ namespace PayPal.Manager
             NameValueConfigurationElement config = Settings[name];
             return ((config == null) ? null : config.Value);
         }
-    }
-    
+    }    
 
     [ConfigurationCollection(typeof(Account), AddItemName = "account",
          CollectionType = ConfigurationElementCollectionType.BasicMap)]
@@ -57,7 +47,6 @@ namespace PayPal.Manager
             return ((Account)element).APIUsername;
         }
 
-
         public Account Account(int index)
         {
             return (Account)BaseGet(index);
@@ -68,10 +57,11 @@ namespace PayPal.Manager
             return (Account)BaseGet(value);
         }
 
-        new public Account this[string name]
+        public new  Account this[string name]
         {
             get { return (Account)BaseGet(name); }
         }
+
         public Account this[int index]
         {
             get { return (Account)BaseGet(index); }
@@ -83,7 +73,6 @@ namespace PayPal.Manager
     /// </summary>
     public class Account : ConfigurationElement
     {
-
         private static readonly ConfigurationProperty apiUsername =
             new ConfigurationProperty("apiUsername", typeof(string), string.Empty, ConfigurationPropertyOptions.IsRequired);
 
@@ -116,7 +105,6 @@ namespace PayPal.Manager
             base.Properties.Add(apiSignature);
             base.Properties.Add(apiCertificate);
             base.Properties.Add(privateKeyPassword);
-
             base.Properties.Add(signSubject);
             base.Properties.Add(certifySubject);
         }
@@ -129,6 +117,7 @@ namespace PayPal.Manager
         {
             get { return (string)this[apiUsername]; }
         }
+
         /// <summary>
         /// API password
         /// </summary>
@@ -191,6 +180,5 @@ namespace PayPal.Manager
         {
             get { return (string)this[certifySubject]; }
         } 
-    }
-   
+    }   
 }
