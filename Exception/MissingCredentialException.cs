@@ -12,8 +12,7 @@ namespace PayPal.Exception
 		/// <summary>
 		/// Represents errors that occur during application execution
 		/// </summary>
-		public MissingCredentialException() : base()
-		{}
+		public MissingCredentialException() : base() {}
 
 
 		/// <summary>

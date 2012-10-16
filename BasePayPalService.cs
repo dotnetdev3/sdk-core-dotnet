@@ -12,10 +12,7 @@ namespace PayPal
        private string LastRequest;
        private string LastResponse;
 
-        public BasePayPalService()
-        {
-           
-        }
+        public BasePayPalService() { }
 
         public void setAccessToken(string accessToken)
         {

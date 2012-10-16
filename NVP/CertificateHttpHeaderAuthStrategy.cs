@@ -9,6 +9,9 @@ namespace PayPal.NVP
 {
     public class CertificateHttpHeaderAuthStrategy : AbstractCertificateHttpHeaderAuthStrategy 
     {
+        /// <summary>
+        /// Exception log
+        /// </summary>
         private static ILog log = LogManager.GetLogger(typeof(CertificateHttpHeaderAuthStrategy));
 
         /// <summary>
@@ -52,13 +55,16 @@ namespace PayPal.NVP
             return headers;
         }
 
-        public static string Timestamp
+        /// <summary>
+        /// Gets the UTC Timestamp
+        /// </summary>
+        private static string Timestamp
         {
             get
             {
                 TimeSpan span = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
                 return Convert.ToInt64(span.TotalSeconds).ToString();
-            }            
+            }
         }
     }
 }

@@ -9,20 +9,19 @@ namespace PayPal.NVP
 {
     public class SignatureHttpHeaderAuthStrategy : AbstractSignatureHttpHeaderAuthStrategy
     {
+        /// <summary>
+        /// Exception log
+        /// </summary>
         private static ILog log = LogManager.GetLogger(typeof(CertificateHttpHeaderAuthStrategy));
 
         /// <summary>
         /// SignatureHttpHeaderAuthStrategy
         /// </summary>
         /// <param name="endPointUrl"></param>
-	    public SignatureHttpHeaderAuthStrategy(string endPointUrl) : base(endPointUrl)
-        {
+        public SignatureHttpHeaderAuthStrategy(string endpointURL) : base(endpointURL) { }
 
-	    }
-
-        /// <summary>
-        /// Processing for {@link TokenAuthorization} under
-        /// {@link SignatureCredential}
+	    /// <summary>
+        /// Processing TokenAuthorization} using SignatureCredential
         /// </summary>
         /// <param name="sigCred"></param>
         /// <param name="tokenAuth"></param>
@@ -37,7 +36,7 @@ namespace PayPal.NVP
                 sigGenerator.setHTTPMethod(OAuthGenerator.HTTPMethod.POST);
                 sigGenerator.setToken(tokenAuth.AccessToken);
                 sigGenerator.setTokenSecret(tokenAuth.TokenSecret);
-                string tokenTimeStamp = GenerateTimeStamp();
+                string tokenTimeStamp = Timestamp;
                 sigGenerator.setTokenTimestamp(tokenTimeStamp);
                 log.Debug("token = " + tokenAuth.AccessToken + " tokenSecret=" + tokenAuth.TokenSecret + " uri=" + endpointURL);
                 sigGenerator.setRequestURI(endpointURL);
@@ -57,15 +56,15 @@ namespace PayPal.NVP
         }
 
         /// <summary>
-        /// Returns the Time Stamp
+        /// Gets the UTC Timestamp
         /// </summary>
-        /// <returns></returns>
-        public static string GenerateTimeStamp()
+        private static string Timestamp
         {
-            // Default implementation of current UTC time
-            TimeSpan span = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(span.TotalSeconds).ToString();
+            get
+            {
+                TimeSpan span = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+                return Convert.ToInt64(span.TotalSeconds).ToString();
+            }
         }
-
     }
 }

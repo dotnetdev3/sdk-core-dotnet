@@ -20,9 +20,9 @@ namespace PayPal.Authentication
         private string pasWord;
 
         /// <summary>
-        /// Application Id (Used by Platform APIs)
+        /// Application ID (Used by Platform APIs)
         /// </summary>
-        private string appId;
+        private string appID;
 
         /// <summary>
         /// Signature
@@ -39,10 +39,10 @@ namespace PayPal.Authentication
         /// </summary>
         /// <param name="usrName"></param>
         /// <param name="pssword"></param>
-        /// <param name="appId"></param>
+        /// <param name="appID"></param>
         /// <param name="sign"></param>
         public SignatureCredential(string usrName, string pssword,
-                string appId, string sign) : base()
+                string appID, string sign) : base()
         {
             if (string.IsNullOrEmpty(usrName) || string.IsNullOrEmpty(pssword) ||
                 string.IsNullOrEmpty(sign))
@@ -51,7 +51,7 @@ namespace PayPal.Authentication
             }
             this.usrName = usrName;
             this.pasWord = pssword;
-            this.appId = appId;
+            this.appID = appID;
             this.sign = sign;
         }
 
@@ -60,31 +60,31 @@ namespace PayPal.Authentication
         /// </summary>
         /// <param name="usrName"></param>
         /// <param name="pasWord"></param>
-        /// <param name="applicationId"></param>
-        /// <param name="signature"></param>
-        /// <param name="thrdPartyAuthorize"></param>
+        /// <param name="appID"></param>
+        /// <param name="sign"></param>
+        /// <param name="thrdPartyAuthorization"></param>       
         public SignatureCredential(string usrName, string pasWord,
-                string applicationId, string signature,
+                string appID, string sign,
                 IThirdPartyAuthorization thrdPartyAuthorization)
-            : this(usrName, pasWord, applicationId, signature)
+            : this(usrName, pasWord, appID, sign)
         {
 
             this.thrdPartyAuthorization = thrdPartyAuthorization;
         }
         
         /// <summary>
-        /// Gets and sets the ApplicationId
+        /// Gets and sets the Application ID
         /// </summary>
-        public string ApplicationId
+        public string ApplicationID
         {
             get
             {
-                return appId;
+                return appID;
             }
 
             set
             {
-                this.appId = value;
+                this.appID = value;
             }
         }
        

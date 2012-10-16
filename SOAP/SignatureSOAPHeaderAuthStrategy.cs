@@ -1,91 +1,82 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 using PayPal.Authentication;
 
-namespace PayPal
+namespace PayPal.SOAP
 {
     public class SignatureSOAPHeaderAuthStrategy : IAuthenticationStrategy<string, SignatureCredential>
     {
         /// <summary>
         /// Instance of ThirdPartyAuthorization
         /// </summary>
-        private IThirdPartyAuthorization thirdPartyAuthorization;
+        private IThirdPartyAuthorization thrdPartyAuthorization;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public SignatureSOAPHeaderAuthStrategy()
-        {
-        }
+        public SignatureSOAPHeaderAuthStrategy() { }
 
         /// <summary>
         /// Gets and sets any instance of {@link ThirdPartyAuthorization}
         /// </summary>
-        public IThirdPartyAuthorization ThirdPartyAuthorize
+        public IThirdPartyAuthorization ThirdPartyAuthorization
         {
             get
             {
-                return thirdPartyAuthorization;
+                return thrdPartyAuthorization;
             }
             set
             {
-                this.thirdPartyAuthorization = value;
+                this.thrdPartyAuthorization = value;
             }
         }
 
         public string GenerateHeaderStrategy(SignatureCredential credential)
         {
             string payLoad = null;
-            if (thirdPartyAuthorization is TokenAuthorization)
+            if (thrdPartyAuthorization is TokenAuthorization)
             {
-                payLoad = tokenAuthPayLoad();
+                payLoad = TokenAuthPayLoad();
             }
-            else if (thirdPartyAuthorization is SubjectAuthorization)
+            else if (thrdPartyAuthorization is SubjectAuthorization)
             {
-                authPayLoad(credential, (SubjectAuthorization)thirdPartyAuthorization);
+                payLoad = AuthPayLoad(credential, (SubjectAuthorization)thrdPartyAuthorization);
             }
             else
             {
-                authPayLoad(credential, null);
+                payLoad = AuthPayLoad(credential, null);
             }
             return payLoad;
         }
 
-        private string tokenAuthPayLoad()
+        private string TokenAuthPayLoad()
         {
-            string payLoad = null;
-            StringBuilder soapMsg = new StringBuilder();
-            soapMsg.Append("<soapenv:Header>");
-            soapMsg.Append("<urn:RequesterCredentials/>");
-            soapMsg.Append("</soapenv:Header>");
-            return payLoad;
+            StringBuilder soapMessage = new StringBuilder();
+            soapMessage.Append("<ns:RequesterCredentials/>");
+            return soapMessage.ToString();
         }
 
-        private string authPayLoad(SignatureCredential credential,
+        private string AuthPayLoad(SignatureCredential signCredential,
                 SubjectAuthorization subjectAuth)
-        {
-            string payLoad = null;
-            StringBuilder soapMsg = new StringBuilder();
-            soapMsg.Append("<soapenv:Header>");
-            soapMsg.Append("<urn:RequesterCredentials>");
-            soapMsg.Append("<ebl:Credentials>");
-            soapMsg.Append("<ebl:Username>" + credential.UserName
+        {  
+            StringBuilder soapMessage = new StringBuilder();
+            soapMessage.Append("<ns:RequesterCredentials>");
+            soapMessage.Append("<ebl:Credentials>");
+            soapMessage.Append("<ebl:Username>" + signCredential.UserName
                     + "</ebl:Username>");
-            soapMsg.Append("<ebl:Password>" + credential.Password
+            soapMessage.Append("<ebl:Password>" + signCredential.Password
                     + "</ebl:Password>");
-            soapMsg.Append("<ebl:Signature>" + credential.Signature
+            soapMessage.Append("<ebl:Signature>" + signCredential.Signature
                     + "</ebl:Signature>");
             if (subjectAuth != null)
             {
-                soapMsg.Append("<ebl:Subject>" + subjectAuth.Subject
+                soapMessage.Append("<ebl:Subject>" + subjectAuth.Subject
                         + "</ebl:Subject>");
             }
-            soapMsg.Append("</ebl:Credentials>");
-            soapMsg.Append("</urn:RequesterCredentials>");
-            soapMsg.Append("</soapenv:Header>");
-            return payLoad;
+            soapMessage.Append("</ebl:Credentials>");
+            soapMessage.Append("</ns:RequesterCredentials>");
+            return soapMessage.ToString();
         }
     }
 }

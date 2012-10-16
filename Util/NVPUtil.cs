@@ -16,9 +16,9 @@ namespace PayPal.Util
         {
             Dictionary<string, string> nvpMap = new Dictionary<string, string>();
             string[] keyValuePairs = nvpStr.Split('&');
-            foreach (string kvp in keyValuePairs)
+            foreach (string pair in keyValuePairs)
             {
-                string[] keyValue = kvp.Split('=');
+                string[] keyValue = pair.Split('=');
                 if (keyValue.Length == 2)
                 {
                     nvpMap.Add(keyValue[0], HttpUtility.UrlDecode(keyValue[1], BaseConstants.ENCODING_FORMAT) );

@@ -22,9 +22,9 @@ namespace PayPal.Authentication
         private string pasWord;
 
         /// <summary>
-        /// Application Id (Used by Platform APIs)
+        /// Application ID (Used by Platform APIs)
         /// </summary>
-        private string appId;
+        private string appID;
 
         /// <summary>
         /// Certificate file
@@ -46,10 +46,10 @@ namespace PayPal.Authentication
         /// </summary>
         /// <param name="usrName"></param>
         /// <param name="pasWord"></param>
-        /// <param name="appId"></param>
+        /// <param name="appID"></param>
         /// <param name="certFile"></param>
         /// <param name="priKeyPassword"></param>
-        public CertificateCredential(string usrName, string pasWord, string appId, 
+        public CertificateCredential(string usrName, string pasWord, string appID, 
             string certFile, string priKeyPassword) : base()
         {
             if (string.IsNullOrEmpty(usrName) || string.IsNullOrEmpty(pasWord) ||
@@ -59,7 +59,7 @@ namespace PayPal.Authentication
             }
             this.usrName = usrName;
             this.pasWord = pasWord;
-            this.appId = appId;
+            this.appID = appID;
             this.certFile = certFile;
             this.priKeyPassword = priKeyPassword;
         }                    
@@ -69,19 +69,17 @@ namespace PayPal.Authentication
         /// </summary>
         /// <param name="usrName"></param>
         /// <param name="pasWord"></param>
-        /// <param name="appId"></param>
+        /// <param name="appID"></param>
         /// <param name="certFile"></param>
         /// <param name="priKeyPassword"></param>
-        /// <param name="thrdPartyAuthorize"></param>
+        /// <param name="thrdPartyAuthorization"></param>
         public CertificateCredential(string usrName, string pasWord,
-                string appId, string certFile,
+                string appID, string certFile,
                 string priKeyPassword, IThirdPartyAuthorization thrdPartyAuthorization)
-            : this(usrName, pasWord, appId, certFile, priKeyPassword)
+            : this(usrName, pasWord, appID, certFile, priKeyPassword)
         {
            this.thrdPartyAuthorization = thrdPartyAuthorization;
-        }
-        
-      
+        }   
         
         /// <summary>
         ///  Gets and sets the instance of IThirdPartyAuthorization
@@ -121,17 +119,17 @@ namespace PayPal.Authentication
         }
 
         /// <summary>
-        /// Gets and sets the Application Id (Used by Platform APIs)
+        /// Gets and sets the Application ID (Used by Platform APIs)
         /// </summary>
-        public string ApplicationId
+        public string ApplicationID
         {
             get
             {
-                return appId;
+                return appID;
             }
             set
             {
-                appId = value;
+                appID = value;
             }
         }
 

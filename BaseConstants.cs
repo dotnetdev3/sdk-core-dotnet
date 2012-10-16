@@ -20,8 +20,8 @@ namespace PayPal
         // Account Prefix
         public const string ACCCOUT_PREFIX = "acct";
 
-        // Sandbox Email Address
-        public const string SANDBOX_EMAIL_ADDRESS = "Platform.sdk.seller@gmail.com";
+        // Sandbox Default Email Address
+        public const string PayPalSandboxEmailAddressDefault = "Platform.sdk.seller@gmail.com";
         
         // SOAP Format
         public const string SOAP = "SOAP";
@@ -56,10 +56,24 @@ namespace PayPal
 
         // PayPal Request Source Header
         public const string PAYPAL_REQUEST_SOURCE_HEADER = "X-PAYPAL-REQUEST-SOURCE";
+        
+        // PayPal Sandbox Email Address Header
+        public const string PAYPAL_SANDBOX_DEVICE_IPADDRESS = "X-PAYPAL-DEVICE-IPADDRESS";
+
+        // PayPal Sandbox Email Address Header
+        public const string PAYPAL_SANDBOX_EMAIL_ADDRESS_HEADER = "X-PAYPAL-SANDBOX-EMAIL-ADDRESS";
 
         // Constants key defined for configuration options in application properties
         // End point
         public const string END_POINT = "endpoint";
+
+        // Constants key defined for configuration options in application properties
+        // IPAddress
+        public const string PayPalIPAddress = "IPAddress";
+       
+        // Constants key defined for configuration options in application properties
+        // Email Address
+        public const string PayPalSandboxEmailAddress = "sandboxEmailAddress";
 
         // HTTP Proxy Address
         public const string HTTP_PROXY_ADDRESS = "proxyAddress";
@@ -93,7 +107,6 @@ namespace PayPal
 
         // Credential Certificate Key
         public const string CREDENTIAL_CERTKEY_SUFFIX = "privateKeyPassword";
-
 
         public static class ErrorMessages
         {

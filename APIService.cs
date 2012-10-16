@@ -51,7 +51,7 @@ namespace PayPal
             foreach (KeyValuePair<string, string> header in headers)
             {
                 httpRequest.Headers.Add(header.Key, header.Value);
-            }
+            }  
             if (log.IsDebugEnabled)
             {
                 foreach (string headerName in httpRequest.Headers)
@@ -74,7 +74,7 @@ namespace PayPal
             {
                 try
                 {
-                    // calling the plaftform API web service and getting the response
+                    // Calling the plaftform API web service and getting the response
                     using (WebResponse response = httpRequest.GetResponse())
                     {
                         using (StreamReader sr = new StreamReader(response.GetResponseStream()))
@@ -86,7 +86,7 @@ namespace PayPal
                         }
                     }
                 }
-                // server responses in the range of 4xx and 5xx throw a WebException
+                // Server responses in the range of 4xx and 5xx throw a WebException
                 catch (WebException we)
                 {
                     HttpStatusCode statusCode = ((HttpWebResponse)we.Response).StatusCode;
@@ -97,7 +97,7 @@ namespace PayPal
                         throw new ConnectionException("Invalid HTTP response " + we.Message);
                     }
                 }
-                catch (System.Exception)
+                catch
                 {
                     throw;
                 }
@@ -119,8 +119,5 @@ namespace PayPal
             HttpStatusCode status = ((HttpWebResponse)ex.Response).StatusCode;
             return retryCodes.Contains(status);
         }
-
     }
-
-
 }

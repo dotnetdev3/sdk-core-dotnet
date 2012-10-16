@@ -2,29 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-
 using PayPal.Authentication;
 using PayPal.Exception;
 using PayPal.Manager;
 
-namespace PayPal
+namespace PayPal.SOAP
 {
     public class SOAPAPICallPreHandler : IAPICallPreHandler
-    {
-	    /**
-	     * Pattern for Message Formatting
-	     */
-	    //private const Pattern REGEX_PATTERN = Pattern.compile("(['])");
-
-        //private const string REGEX_PATTERN = @"(['])";
-
-	    /// <summary>
+    { 
+        /// <summary>
 	    /// API Username for authentication
 	    /// </summary>
 	    private string apiUserName;
 
 	    /// <summary>
-	    /// {@link ICredential} for authentication
+	    /// ICredential instance for authentication
 	    /// </summary>
 	    private ICredential credential;
 
@@ -39,19 +31,19 @@ namespace PayPal
 	    private string tokenSecret;
 
 	    /// <summary>
-	    /// {@link APICallPreHandler} instance
+	    /// IAPICallPreHandler instance
 	    /// </summary>
 	    private IAPICallPreHandler apiCallHandler;
-        
-	    /// <summary>
-	    /// SDK Name used in tracking
-	    /// </summary>
-	    private string sdkName;
 
-	    /// <summary>
-	    /// SDK Version
-	    /// </summary>
-	    private string sdkVersion;
+        /// <summary>
+        /// SDK Name used in tracking
+        /// </summary>
+        private string sdkNme;
+
+        /// <summary>
+        /// SDK Version
+        /// </summary>
+        private string sdkVrsion;
         
 	    /// <summary>
 	    /// Internal variable to hold headers
@@ -63,49 +55,37 @@ namespace PayPal
 	    /// </summary>
 	    private string payLoad;
         
-        /// <summary>
+       /// <summary>
         /// Private Constructor
-        /// </summary>
-        /// <param name="apiCallHandler"></param>
+       /// </summary>
+       /// <param name="apiCallHandler"></param>
 	    private SOAPAPICallPreHandler(IAPICallPreHandler apiCallHandler) : base()
         {
-		    
-		    this.apiCallHandler = apiCallHandler;
+            this.apiCallHandler = apiCallHandler;
 	    }
-
-	    /**
-	     * SOAPAPICallPreHandler decorating basic {@link APICallPreHandler} using
-	     * API Username
-	     * 
-	     * @param apiCallHandler
-	     *            Instance of {@link APICallPreHandler}
-	     * @param apiUserName
-	     *            API Username
-	     * @param accessToken
-	     *            Access Token
-	     * @param tokenSecret
-	     *            Token Secret
-	     * @throws InvalidCredentialException
-	     * @throws MissingCredentialException
-	     */
+	   
         //throws InvalidCredentialException, MissingCredentialException 
+
+        /// <summary>
+        /// SOAPAPICallPreHandler decorating basic IAPICallPreHandler using API Username
+        /// </summary>
+        /// <param name="apiCallHandler"></param>
+        /// <param name="apiUserName"></param>
+        /// <param name="accessToken"></param>
+        /// <param name="tokenSecret"></param>
 	    public SOAPAPICallPreHandler(IAPICallPreHandler apiCallHandler, string apiUserName, string accessToken, string tokenSecret) : this(apiCallHandler)
 		{		    
 		    this.apiUserName = apiUserName;
 		    this.accessToken = accessToken;
 		    this.tokenSecret = tokenSecret;
-		    initCredential();
+		    InitCredential();
 	    }
 
-	    /**
-	     * SOAPAPICallPreHandler decorating basic {@link APICallPreHandler} using
-	     * {@link ICredential}
-	     * 
-	     * @param apiCallHandler
-	     *            Instance of {@link APICallPreHandler}
-	     * @param credential
-	     *            Instance of {@link ICredential}
-	     */
+	    /// <summary>
+	    ///  SOAPAPICallPreHandler decorating basic IAPICallPreHandler using ICredential
+	    /// </summary>
+	    /// <param name="apiCallHandler"></param>
+	    /// <param name="credential"></param>
 	    public SOAPAPICallPreHandler(IAPICallPreHandler apiCallHandler, ICredential credential) : this(apiCallHandler)
         {	    
 		    if (credential == null) 
@@ -114,62 +94,67 @@ namespace PayPal
 		    }
 		    this.credential = credential;
 	    }
-    	
-	    
-	    public string SdkName
+        
+        /// <summary>
+        /// Gets and sets the SDK Name
+        /// </summary>
+        public string SDKName
         {
             get
             {
-		        return sdkName;
-	        }
-	        set
+                return sdkNme;
+            }
+            set
             {
-		        this.sdkName = value;
-	        }
+                this.sdkNme = value;
+            }
         }
-        
-        
 
-	 
-	    public string getSdkVersion
+        /// <summary>
+        /// Gets and sets the SDK version
+        /// </summary>
+        public string SDKVersion
         {
             get
-
             {
-		    return sdkVersion;
-	        }
-
-	       set
-           {
-		        this.sdkVersion = value;
-	        }
+                return sdkVrsion;
+            }
+            set
+            {
+                this.sdkVrsion = value;
+            }
         }
 
-        //throws OAuthException
-	    public Dictionary<string, string> GetHeaderMap()  
+        public Dictionary<string, string> GetHeaderMap()
         {
-		    if (headers == null) 
+            try
             {
-			    headers = apiCallHandler.GetHeaderMap();
-			    if (credential is SignatureCredential) 
+                if (headers == null)
                 {
-				    SignatureHttpHeaderAuthStrategy signatureHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy(GetEndPoint());
-				    headers = signatureHttpHeaderAuthStrategy.GenerateHeaderStrategy((SignatureCredential) credential);
-			    } 
-                else if (credential is CertificateCredential) 
-                {
-				    CertificateHttpHeaderAuthStrategy certificateHttpHeaderAuthStrategy = new CertificateHttpHeaderAuthStrategy(GetEndPoint());
-				    headers = certificateHttpHeaderAuthStrategy.GenerateHeaderStrategy((CertificateCredential) credential);
-			    }
-			    //headers.putAll(getDefaultHttpHeadersSOAP());
+                    headers = apiCallHandler.GetHeaderMap();
+                    if (credential is SignatureCredential)
+                    {
+                        SignatureHttpHeaderAuthStrategy signatureHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy(GetEndPoint());
+                        headers = signatureHttpHeaderAuthStrategy.GenerateHeaderStrategy((SignatureCredential)credential);
+                    }
+                    else if (credential is CertificateCredential)
+                    {
+                        CertificateHttpHeaderAuthStrategy certificateHttpHeaderAuthStrategy = new CertificateHttpHeaderAuthStrategy(GetEndPoint());
+                        headers = certificateHttpHeaderAuthStrategy.GenerateHeaderStrategy((CertificateCredential)credential);
+                    }
 
-                foreach(KeyValuePair<string, string> pair in getDefaultHttpHeadersSOAP())
-                {
-                    headers.Add(pair.Key, pair.Value);
+                    foreach (KeyValuePair<string, string> pair in GetDefaultHttpHeadersSOAP())
+                    {
+                        headers.Add(pair.Key, pair.Value);
+                    }
                 }
-		    }
-		    return headers;
-	    }
+            }
+            catch (OAuthException)
+            {
+                throw;
+            }
+            return headers;
+        }	    
 
 	    public string GetPayLoad() 
         {
@@ -177,42 +162,53 @@ namespace PayPal
 		    // if the credentials mandate soap headers
 		    if (payLoad == null) 
             {
-			    payLoad = apiCallHandler.GetPayLoad();
+                payLoad = apiCallHandler.GetPayLoad();
 			    string header = null;
 			    if (credential is SignatureCredential)
                 {
 				    SignatureCredential sigCredential = (SignatureCredential) credential;
 				    SignatureSOAPHeaderAuthStrategy signatureSoapHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-				    signatureSoapHeaderAuthStrategy.ThirdPartyAuthorize = sigCredential.ThirdPartyAuthorization;
+				    signatureSoapHeaderAuthStrategy.ThirdPartyAuthorization = sigCredential.ThirdPartyAuthorization;
 						    
 				    header = signatureSoapHeaderAuthStrategy.GenerateHeaderStrategy(sigCredential);
-			    } else if (credential is CertificateCredential) {
+			    } 
+                else if (credential is CertificateCredential) 
+                {
 				    CertificateCredential certCredential = (CertificateCredential) credential;
 				    CertificateSOAPHeaderAuthStrategy certificateSoapHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
-				    certificateSoapHeaderAuthStrategy.ThirdPartyAuthorize = certCredential.ThirdPartyAuthorization;					
+				    certificateSoapHeaderAuthStrategy.ThirdPartyAuthorization = certCredential.ThirdPartyAuthorization;					
 				    header = certificateSoapHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
 
 			    }
-			    payLoad = getPayLoadUsingSOAPHeader(payLoad, getNamespaces(),header);
+			    payLoad = GetPayLoadUsingSOAPHeader(payLoad, GetAttributeNamespace(), header);
 		    }
 		    return payLoad;
 	    }
 
+        /// <summary>
+        /// Returns the endpoint
+        /// </summary>
+        /// <returns></returns>
 	    public string GetEndPoint() 
         {
 		    return apiCallHandler.GetEndPoint();
 	    }
-
+        
+        /// <summary>
+        /// Returns the instance of ICredential
+        /// </summary>
+        /// <returns></returns>
 	    public ICredential GetCredential() 
         {
 		    return credential;
 	    }
-
-	    /*
-	     * Returns a credential as configured in the application configuration
-	     */
+        	  
         // throws InvalidCredentialException, MissingCredentialException
-	    private ICredential getCredentials() 
+        /// <summary>
+        ///  Returns the credentials as configured in the application configuration
+        /// </summary>
+        /// <returns></returns>
+	    private ICredential GetCredentials() 
         {
 		    ICredential returnCredential = null;
 		    CredentialManager credentialManager = CredentialManager.Instance;
@@ -238,49 +234,60 @@ namespace PayPal
 		    return returnCredential;
 	    }
 
-	    /*
-	     * Returns default HTTP headers used in SOAP call
-	     */
-	    private Dictionary<string, string> getDefaultHttpHeadersSOAP() 
+	    /// <summary>
+        /// Returns default HTTP headers used in SOAP call
+	    /// </summary>
+	    /// <returns></returns>
+	    private Dictionary<string, string> GetDefaultHttpHeadersSOAP() 
         {
 		    Dictionary<string, string> returnMap = new Dictionary<string, string>();
 		    returnMap.Add(BaseConstants.PAYPAL_REQUEST_DATA_FORMAT_HEADER, "SOAP");
 		    returnMap.Add(BaseConstants.PAYPAL_RESPONSE_DATA_FORMAT_HEADER, "SOAP");
-		    returnMap.Add("X-PAYPAL-REQUEST-SOURCE", sdkName + "-" + sdkVersion);
+            returnMap.Add(BaseConstants.PAYPAL_REQUEST_SOURCE_HEADER, SDKName + "-" + SDKVersion);
 		    return returnMap;
-	    }
+	    }        
 
-	    /*
-	     * Initialize {@link ICredential}
-	     */
-        //throws InvalidCredentialException, MissingCredentialException
-	    private void initCredential()  
+        /// <summary>
+        /// Initializes the instance of ICredential
+        /// </summary>
+	    private void InitCredential()  
         {
-		    if (credential == null) 
+            try
             {
-			    credential = getCredentials();
-		    }
+                if (credential == null)
+                {
+                    credential = GetCredentials();
+                }
+            }
+            catch
+            {
+                throw;
+            }
 	    }
 
-	    /*
-	     * Gets Namespace specific to PayPal APIs
-	     */
-	    private string getNamespaces() 
+	    /// <summary>
+        /// Returns Namespace specific to PayPal APIs
+	    /// </summary>
+	    /// <returns></returns>
+        private string GetAttributeNamespace() 
         {
-		    string namespaces = "xmlns:ns=\"urn:ebay:api:PayPalAPI\" xmlns:ebl=\"urn:ebay:apis:eBLBaseComponents\" xmlns:cc=\"urn:ebay:apis:CoreComponentTypes\" xmlns:ed=\"urn:ebay:apis:EnhancedDataTypes\"";
-		    return namespaces;
+		    string AttributeNamespace = "xmlns:ns=\"urn:ebay:api:PayPalAPI\" xmlns:ebl=\"urn:ebay:apis:eBLBaseComponents\" xmlns:cc=\"urn:ebay:apis:CoreComponentTypes\" xmlns:ed=\"urn:ebay:apis:EnhancedDataTypes\"";
+            return AttributeNamespace;
 	    }
 
-	    /*
-	     * Returns Payload after decoration
-	     */
-	    private string getPayLoadUsingSOAPHeader(string payLoad, string namespaces, string header) 
+	    /// <summary>
+        /// Returns Payload after decoration
+	    /// </summary>
+	    /// <param name="payLoad"></param>
+	    /// <param name="namespaces"></param>
+	    /// <param name="header"></param>
+	    /// <returns></returns>
+	    private string GetPayLoadUsingSOAPHeader(string payLoad, string namespaces, string header) 
         {
 		    string returnPayLoad = null;
 		    string formattedPayLoad = payLoad;
 		    returnPayLoad = string.Format(formattedPayLoad, new object[] {namespaces, header});
 		    return returnPayLoad;
 	    }
-
     }
 }

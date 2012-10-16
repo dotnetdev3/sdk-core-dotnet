@@ -111,14 +111,14 @@ namespace PayPal
         /// <returns></returns>
 	    public string GetPayLoad() 
         {
-		    StringBuilder stringBuilder = new StringBuilder();
-		    stringBuilder.Append(GetSoapEnvelopeStart());
-		    stringBuilder.Append(GetSoapHeaderStart());
-		    stringBuilder.Append(GetSoapHeaderEnd());
-		    stringBuilder.Append(GetSoapBodyStart());
-		    stringBuilder.Append(GetSoapBodyEnd());
-		    stringBuilder.Append(GetSoapEnvelopeEnd());
-		    return stringBuilder.ToString();
+		    StringBuilder payload = new StringBuilder();
+		    payload.Append(GetSoapEnvelopeStart());
+		    payload.Append(GetSoapHeaderStart());
+		    payload.Append(GetSoapHeaderEnd());
+		    payload.Append(GetSoapBodyStart());
+		    payload.Append(GetSoapBodyEnd());
+		    payload.Append(GetSoapEnvelopeEnd());
+		    return payload.ToString();
 	    }
         
         /// <summary>

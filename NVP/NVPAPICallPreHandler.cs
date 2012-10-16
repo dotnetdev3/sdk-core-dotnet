@@ -27,7 +27,7 @@ namespace PayPal.NVP
 	    /// <summary>
 	    /// API Username for authentication
 	    /// </summary>
-	    private string apiUserName;
+	    private string apiUsername;
 
 	    /// <summary>
 	    /// {@link ICredential} for authentication
@@ -47,12 +47,12 @@ namespace PayPal.NVP
 	    /// <summary>
 	    /// SDK Name used in tracking
 	    /// </summary>
-        private string sdkName;
+        private string sdkNme;
 
         /// <summary>
         /// SDK Version
         /// </summary>
-	    private string sdkVersion;
+	    private string sdkVrsion;
         
         /// <summary>
         /// Internal variable to hold headers
@@ -72,31 +72,28 @@ namespace PayPal.NVP
 		    this.method = method;
 	    }
 
-        //throws InvalidCredentialException, MissingCredentialException
-	    /**
-	     * NVPAPICallPreHandler
-	     * 
-	     * @param serviceName
-	     *            Service Name
-	     * @param rawPayLoad
-	     *            Payload
-	     * @param method
-	     *            API method
-	     * @param apiUserName
-	     *            API Username
-	     * @param accessToken
-	     *            Access Token
-	     * @param tokenSecret
-	     *            Token Secret
-	     * @throws MissingCredentialException
-	     * @throws InvalidCredentialException
-	     */
-	    public NVPAPICallPreHandler(string rawPayLoad, string serviceName, string method, string apiUserName, string accessToken, string tokenSecret)  : this(rawPayLoad, serviceName, method)
+        /// <summary>
+        /// NVPAPICallPreHandler
+        /// </summary>
+        /// <param name="rawPayLoad"></param>
+        /// <param name="serviceName"></param>
+        /// <param name="method"></param>
+        /// <param name="apiUsername"></param>
+        /// <param name="accessToken"></param>
+        /// <param name="tokenSecret"></param>
+	    public NVPAPICallPreHandler(string rawPayLoad, string serviceName, string method, string apiUsername, string accessToken, string tokenSecret)  : this(rawPayLoad, serviceName, method)
         {
-            this.apiUserName = apiUserName;
-		    this.accessToken = accessToken;
-		    this.tokenSecret = tokenSecret;
-		    initCredential();
+            try
+            {
+                this.apiUsername = apiUsername;
+                this.accessToken = accessToken;
+                this.tokenSecret = tokenSecret;
+                InitCredential();
+            }
+            catch
+            {
+                throw;
+            }		    
 	    }
 
 	    /// <summary>
@@ -114,41 +111,41 @@ namespace PayPal.NVP
 		    }
 		    this.credential = credential;
 	    }
-
-	    /**
-	     * @return the sdkName
-	     */
-	    public string getSdkName() 
+        	    
+        /// <summary>
+        /// Gets and sets the SDK Name
+        /// </summary>
+	    public string SDKName
         {
-		    return sdkName;
+            get
+            {
+                return sdkNme;
+            }
+            set
+            {
+                this.sdkNme = value;
+            }
 	    }
 
-	    /**
-	     * @param sdkName
-	     *            the sdkName to set
-	     */
-	    public void setSdkName(string sdkName) 
+	    /// <summary>
+        /// Gets and sets the SDK version
+	    /// </summary>
+	    public string SDKVersion
         {
-		    this.sdkName = sdkName;
+           get
+           {
+               return sdkVrsion;
+           }
+           set
+           {
+               this.sdkVrsion = value;
+           }
 	    }
 
-	    /**
-	     * @return the sdkVersion
-	     */
-	    public string getSdkVersion()
-        {
-		    return sdkVersion;
-	    }
-
-	    /**
-	     * @param sdkVersion
-	     *            the sdkVersion to set
-	     */
-	    public void setSdkVersion(string sdkVersion) 
-        {
-		    this.sdkVersion = sdkVersion;
-	    }
-
+        /// <summary>
+        /// Returns the Header
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, string> GetHeaderMap()
         {
             try
@@ -166,7 +163,7 @@ namespace PayPal.NVP
                         CertificateHttpHeaderAuthStrategy certificateHttpHeaderAuthStrategy = new CertificateHttpHeaderAuthStrategy(GetEndPoint());
                         headers = certificateHttpHeaderAuthStrategy.GenerateHeaderStrategy((CertificateCredential)credential);
                     }
-                    foreach (KeyValuePair<string, string> pair in getDefaultHttpHeadersNVP())
+                    foreach (KeyValuePair<string, string> pair in GetDefaultHttpHeadersNVP())
                     {
                         headers.Add(pair.Key, pair.Value);
                     }
@@ -179,9 +176,12 @@ namespace PayPal.NVP
             return headers;
         }
 
+        /// <summary>
+        /// Returns the raw payload as no processing necessary for NVP
+        /// </summary>
+        /// <returns></returns>
 	    public string GetPayLoad() 
         {
-		    // No processing necessary for NVP return the raw payload
 		    return rawPayLoad;
 	    }
 
@@ -190,67 +190,122 @@ namespace PayPal.NVP
 		    return ConfigManager.Instance.GetProperty(BaseConstants.END_POINT) + serviceName + "/" + method;
 	    }
 
+        /// <summary>
+        /// Reurns instance of ICredential
+        /// </summary>
+        /// <returns></returns>
 	    public ICredential GetCredential() 
         {
 		    return credential;
 	    }
 
-        //throws InvalidCredentialException, MissingCredentialException
+        /// <summary>
+        /// Returns the credentials
+        /// </summary>
+        /// <returns></returns>
 	    private ICredential GetCredentials()  
         {
 		    ICredential returnCredential = null;
-		    CredentialManager credentialManager = CredentialManager.Instance;
-		    returnCredential = credentialManager.GetCredentials(apiUserName);
 
-		    if (!string.IsNullOrEmpty(accessToken)) 
+            try
             {
-			    IThirdPartyAuthorization tokenAuth = new TokenAuthorization(accessToken, tokenSecret);
-    			
-                if (returnCredential is SignatureCredential) 
+                CredentialManager credentialManager = CredentialManager.Instance;
+                returnCredential = credentialManager.GetCredentials(apiUsername);
+
+                if (!string.IsNullOrEmpty(accessToken))
                 {
-				    SignatureCredential sigCred = (SignatureCredential) returnCredential;
-				    sigCred.ThirdPartyAuthorization = tokenAuth;
-			    } 
-                else if (returnCredential is CertificateCredential) 
-                {
-				    CertificateCredential certCred = (CertificateCredential) returnCredential;
-				    certCred.ThirdPartyAuthorization = tokenAuth;
-			    }
-		    }
+                    IThirdPartyAuthorization tokenAuth = new TokenAuthorization(accessToken, tokenSecret);
+
+                    if (returnCredential is SignatureCredential)
+                    {
+                        SignatureCredential sigCred = (SignatureCredential)returnCredential;
+                        sigCred.ThirdPartyAuthorization = tokenAuth;
+                    }
+                    else if (returnCredential is CertificateCredential)
+                    {
+                        CertificateCredential certCred = (CertificateCredential)returnCredential;
+                        certCred.ThirdPartyAuthorization = tokenAuth;
+                    }
+                }
+            }
+            catch
+            {
+                throw;
+            }
 		    return returnCredential;
 	    }
 
-	    private Dictionary<string, string> getDefaultHttpHeadersNVP() 
+        /// <summary>
+        /// Returns the Default Http Headers NVP
+        /// </summary>
+        /// <returns></returns>
+	    private Dictionary<string, string> GetDefaultHttpHeadersNVP() 
         {
 		    Dictionary<string, string> returnMap = new Dictionary<string, string>();
-            returnMap.Add(BaseConstants.PAYPAL_APPLICATION_ID, getApplicationId());
+            returnMap.Add(BaseConstants.PAYPAL_APPLICATION_ID, GetApplicationID());
 		    returnMap.Add(BaseConstants.PAYPAL_REQUEST_DATA_FORMAT_HEADER, BaseConstants.NVP);
             returnMap.Add(BaseConstants.PAYPAL_RESPONSE_DATA_FORMAT_HEADER, BaseConstants.NVP);
-            returnMap.Add(BaseConstants.PAYPAL_REQUEST_SOURCE_HEADER, sdkName + "-" + sdkVersion);
+            returnMap.Add(BaseConstants.PAYPAL_REQUEST_SOURCE_HEADER, SDKName + "-" + SDKVersion);           
+            returnMap.Add(BaseConstants.PAYPAL_SANDBOX_EMAIL_ADDRESS_HEADER, GetSandboxEmailAddress());
+            returnMap.Add(BaseConstants.PAYPAL_SANDBOX_DEVICE_IPADDRESS, GetDeviceIPAddress());    
 		    return returnMap;
 	    }
 
-	    private string getApplicationId() 
+        /// <summary>
+        /// Returns Application ID
+        /// </summary>
+        /// <returns></returns>
+	    private string GetApplicationID() 
         {
-		    string applicationId = null;
+		    string applicationID = string.Empty;
 		    if (credential is CertificateCredential) 
             {
-			    applicationId = ((CertificateCredential) credential).ApplicationId;
+			    applicationID = ((CertificateCredential) credential).ApplicationID;
 		    } 
             else if (credential is SignatureCredential) 
             {
-			    applicationId = ((SignatureCredential) credential).ApplicationId;
+			    applicationID = ((SignatureCredential) credential).ApplicationID;
 		    }
-		    return applicationId;
+		    return applicationID;
 	    }
 
-        //throws InvalidCredentialException, MissingCredentialException 
-	    private void initCredential() 
+	    private void InitCredential() 
         {
 		    if (credential == null) 
             {
-			    credential = GetCredentials();
+                try
+                {
+                    credential = GetCredentials();
+                }
+                catch
+                {
+                    throw;
+                }                
 		    }
 	    }
+
+        private string GetDeviceIPAddress()
+        {
+            if (!string.IsNullOrEmpty(ConfigManager.Instance.GetProperty(BaseConstants.PayPalIPAddress)))
+            {
+                return ConfigManager.Instance.GetProperty(BaseConstants.PayPalIPAddress);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        private string GetSandboxEmailAddress()
+        {
+            if (!string.IsNullOrEmpty(ConfigManager.Instance.GetProperty(BaseConstants.PayPalSandboxEmailAddress)))
+            {
+                return ConfigManager.Instance.GetProperty(BaseConstants.PayPalSandboxEmailAddress);
+            }
+            else
+            {
+                return BaseConstants.PayPalSandboxEmailAddressDefault;
+            }
+        }    
     }
 }
