@@ -6,8 +6,5 @@ namespace PayPal.Authentication
     /// by the service for authentication. Credential implementations are
     /// essentially information passed on to any API service for authentication
     /// </summary>
-    public interface ICredential
-    {
-
-    }
+    public interface ICredential { }
 }

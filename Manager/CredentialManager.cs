@@ -26,8 +26,7 @@ namespace PayPal.Manager
         /// Private Constructor
         /// </summary>
         private CredentialManager() { }
-
-
+        
         /// <summary>
         /// Gets the Singleton instance of ConnectionManager
         /// </summary>
@@ -117,7 +116,7 @@ namespace PayPal.Manager
         }
 
         /// <summary>
-        /// Validates the API Credentials
+        /// Validates the Signature Credentials
         /// </summary>
         /// <param name="apiCredentials"></param>
         private void Validate(SignatureCredential apiCredentials)
@@ -137,7 +136,7 @@ namespace PayPal.Manager
         }
 
         /// <summary>
-        /// Validates the API Credentials
+        /// Validates the Certificate Credentials
         /// </summary>
         /// <param name="apiCredentials"></param>
         private void Validate(CertificateCredential apiCredentials)

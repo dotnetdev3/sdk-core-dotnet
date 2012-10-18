@@ -62,9 +62,7 @@ namespace PayPal.SOAP
 	    private SOAPAPICallPreHandler(IAPICallPreHandler apiCallHandler) : base()
         {
             this.apiCallHandler = apiCallHandler;
-	    }
-	   
-        //throws InvalidCredentialException, MissingCredentialException 
+	    }  
 
         /// <summary>
         /// SOAPAPICallPreHandler decorating basic IAPICallPreHandler using API Username
@@ -74,11 +72,18 @@ namespace PayPal.SOAP
         /// <param name="accessToken"></param>
         /// <param name="tokenSecret"></param>
 	    public SOAPAPICallPreHandler(IAPICallPreHandler apiCallHandler, string apiUserName, string accessToken, string tokenSecret) : this(apiCallHandler)
-		{		    
-		    this.apiUserName = apiUserName;
-		    this.accessToken = accessToken;
-		    this.tokenSecret = tokenSecret;
-		    InitCredential();
+		{
+            try
+            {
+                this.apiUserName = apiUserName;
+                this.accessToken = accessToken;
+                this.tokenSecret = tokenSecret;
+                InitCredential();
+            }
+            catch(System.Exception ex)
+            {
+                throw ex;
+            }
 	    }
 
 	    /// <summary>
@@ -125,6 +130,11 @@ namespace PayPal.SOAP
             }
         }
 
+
+        /// <summary>
+        /// Returns the Header
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, string> GetHeaderMap()
         {
             try
@@ -149,35 +159,38 @@ namespace PayPal.SOAP
                     }
                 }
             }
-            catch (OAuthException)
+            catch (OAuthException ae)
             {
-                throw;
+                throw ae;
             }
             return headers;
         }	    
-
+        
+        /// <summary>
+        /// Appends SOAP Headers to payload 
+        /// if the credentials mandate soap headers
+        /// </summary>
+        /// <returns></returns>
 	    public string GetPayLoad() 
         {
-		    // This method appends SOAP Headers to payload
-		    // if the credentials mandate soap headers
 		    if (payLoad == null) 
             {
                 payLoad = apiCallHandler.GetPayLoad();
 			    string header = null;
 			    if (credential is SignatureCredential)
                 {
-				    SignatureCredential sigCredential = (SignatureCredential) credential;
-				    SignatureSOAPHeaderAuthStrategy signatureSoapHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-				    signatureSoapHeaderAuthStrategy.ThirdPartyAuthorization = sigCredential.ThirdPartyAuthorization;
+				    SignatureCredential signCredential = (SignatureCredential) credential;
+				    SignatureSOAPHeaderAuthStrategy signSoapHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
+				    signSoapHeaderAuthStrategy.ThirdPartyAuthorization = signCredential.ThirdPartyAuthorization;
 						    
-				    header = signatureSoapHeaderAuthStrategy.GenerateHeaderStrategy(sigCredential);
+				    header = signSoapHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);
 			    } 
                 else if (credential is CertificateCredential) 
                 {
 				    CertificateCredential certCredential = (CertificateCredential) credential;
-				    CertificateSOAPHeaderAuthStrategy certificateSoapHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
-				    certificateSoapHeaderAuthStrategy.ThirdPartyAuthorization = certCredential.ThirdPartyAuthorization;					
-				    header = certificateSoapHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
+				    CertificateSOAPHeaderAuthStrategy certSoapHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
+				    certSoapHeaderAuthStrategy.ThirdPartyAuthorization = certCredential.ThirdPartyAuthorization;					
+				    header = certSoapHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
 
 			    }
 			    payLoad = GetPayLoadUsingSOAPHeader(payLoad, GetAttributeNamespace(), header);
@@ -201,36 +214,42 @@ namespace PayPal.SOAP
 	    public ICredential GetCredential() 
         {
 		    return credential;
-	    }
-        	  
-        // throws InvalidCredentialException, MissingCredentialException
+	    } 
+
         /// <summary>
         ///  Returns the credentials as configured in the application configuration
         /// </summary>
         /// <returns></returns>
 	    private ICredential GetCredentials() 
         {
-		    ICredential returnCredential = null;
-		    CredentialManager credentialManager = CredentialManager.Instance;
-		    returnCredential = credentialManager.GetCredentials(apiUserName);
+            ICredential returnCredential = null;
+            try
+            {                
+                CredentialManager credentialManager = CredentialManager.Instance;
+                returnCredential = credentialManager.GetCredentials(apiUserName);
 
-		    if (!string.IsNullOrEmpty(accessToken)) 
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+
+                    // Set third party authorization to token
+                    // if token is sent as part of request call
+                    IThirdPartyAuthorization thirdPartyAuthorization = new TokenAuthorization(accessToken, tokenSecret);
+                    if (returnCredential is SignatureCredential)
+                    {
+                        SignatureCredential signCredential = (SignatureCredential)returnCredential;
+                        signCredential.ThirdPartyAuthorization = thirdPartyAuthorization;
+                    }
+                    else if (returnCredential is CertificateCredential)
+                    {
+                        CertificateCredential certCredential = (CertificateCredential)returnCredential;
+                        certCredential.ThirdPartyAuthorization = thirdPartyAuthorization;
+                    }
+                }
+            }
+            catch(System.Exception ex)
             {
-
-			    // Set third party authorization to token
-			    // if token is sent as part of request call
-			    IThirdPartyAuthorization tokenAuth = new TokenAuthorization(accessToken, tokenSecret);
-			    if (returnCredential is SignatureCredential) 
-                {
-				    SignatureCredential sigCred = (SignatureCredential) returnCredential;
-				    sigCred.ThirdPartyAuthorization = tokenAuth;
-			    } 
-                else if (returnCredential is CertificateCredential)
-                {
-				    CertificateCredential certCred = (CertificateCredential) returnCredential;
-				    certCred.ThirdPartyAuthorization = tokenAuth;
-			    }
-		    }
+                throw ex;
+            }
 		    return returnCredential;
 	    }
 
@@ -259,9 +278,9 @@ namespace PayPal.SOAP
                     credential = GetCredentials();
                 }
             }
-            catch
+            catch(System.Exception ex)
             {
-                throw;
+                throw ex;
             }
 	    }
 

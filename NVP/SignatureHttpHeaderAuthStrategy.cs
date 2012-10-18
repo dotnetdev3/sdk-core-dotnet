@@ -27,30 +27,30 @@ namespace PayPal.NVP
         /// <param name="tokenAuth"></param>
         /// <returns></returns>
         protected override Dictionary<string, string> ProcessTokenAuthorization(
-                SignatureCredential sigCred, TokenAuthorization tokenAuth)
+                SignatureCredential signCredential, TokenAuthorization toknAuthorization)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             try
             {
-                OAuthGenerator sigGenerator = new OAuthGenerator(sigCred.UserName, sigCred.Password);
+                OAuthGenerator sigGenerator = new OAuthGenerator(signCredential.UserName, signCredential.Password);
                 sigGenerator.setHTTPMethod(OAuthGenerator.HTTPMethod.POST);
-                sigGenerator.setToken(tokenAuth.AccessToken);
-                sigGenerator.setTokenSecret(tokenAuth.TokenSecret);
+                sigGenerator.setToken(toknAuthorization.AccessToken);
+                sigGenerator.setTokenSecret(toknAuthorization.TokenSecret);
                 string tokenTimeStamp = Timestamp;
                 sigGenerator.setTokenTimestamp(tokenTimeStamp);
-                log.Debug("token = " + tokenAuth.AccessToken + " tokenSecret=" + tokenAuth.TokenSecret + " uri=" + endpointURL);
+                log.Debug("token = " + toknAuthorization.AccessToken + " tokenSecret=" + toknAuthorization.TokenSecret + " uri=" + endpointURL);
                 sigGenerator.setRequestURI(endpointURL);
 
                 //Compute Signature
                 string sign = sigGenerator.ComputeSignature();
                 log.Debug("Permissions signature: " + sign);
-                string authorization = "token=" + tokenAuth.AccessToken + ",signature=" + sign + ",timestamp=" + tokenTimeStamp;
+                string authorization = "token=" + toknAuthorization.AccessToken + ",signature=" + sign + ",timestamp=" + tokenTimeStamp;
                 log.Debug("Authorization string: " + authorization);
                 headers.Add(BaseConstants.PAYPAL_AUTHORIZATION_PLATFORM, authorization);
             }
-            catch (OAuthException)
+            catch (OAuthException ae)
             {
-                throw;
+                throw ae;
             }
             return headers;
         }

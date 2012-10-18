@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using PayPal.Authentication;
 using PayPal.Exception;
 using log4net;
@@ -48,9 +47,9 @@ namespace PayPal.NVP
                 log.Debug("Authorization string: " + authorization);
                 headers.Add(BaseConstants.PAYPAL_AUTHORIZATION_PLATFORM, authorization);
             }
-            catch (OAuthException)
+            catch (OAuthException ae)
             {
-                throw;
+                throw ae;
             }
             return headers;
         }

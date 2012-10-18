@@ -1,5 +1,3 @@
-using System;
-
 namespace PayPal.Exception
 {
     public class OAuthException : System.Exception
@@ -62,7 +60,6 @@ namespace PayPal.Exception
             }
         }
 
-        #endregion
-       
+        #endregion       
     }
 }

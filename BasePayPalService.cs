@@ -1,47 +1,42 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using PayPal.Authentication;
-
 namespace PayPal
 {
     public class BasePayPalService
     {       
-       private string AccessToken;
-       private string AccessTokenSecret;
-       private string LastRequest;
-       private string LastResponse;
+       private string accessToken;
+       private string accessTokenSecret;
+       private string lastRequest;
+       private string lastResponse;
 
         public BasePayPalService() { }
 
         public void setAccessToken(string accessToken)
         {
-            this.AccessToken = accessToken;
+            this.accessToken = accessToken;
         }
 
         public void setAccessTokenSecret(string accessTokenSecret)
         {
-            this.AccessTokenSecret = accessTokenSecret;
+            this.accessTokenSecret = accessTokenSecret;
         }
 
         public string getAccessToken()
         {
-            return this.AccessToken;
+            return this.accessToken;
         }
 
         public string getAccessTokenSecret()
         {
-            return this.AccessTokenSecret;
+            return this.accessTokenSecret;
         }
 
         public string getLastRequest()
         {
-            return this.LastRequest;
+            return this.lastRequest;
         }
 
         public string getLastResponse()
         {
-            return this.LastResponse;
+            return this.lastResponse;
         }
 
         /// <summary>
@@ -51,10 +46,10 @@ namespace PayPal
         /// <returns></returns>
         public string Call(IAPICallPreHandler apiCallHandler)
         {
-            APIService apiService = new APIService();
-            this.LastRequest = apiCallHandler.GetPayLoad();
-            this.LastResponse = apiService.MakeRequestUsing(apiCallHandler);
-            return this.LastResponse;
+            APIService apiServ = new APIService();
+            this.lastRequest = apiCallHandler.GetPayLoad();
+            this.lastResponse = apiServ.MakeRequestUsing(apiCallHandler);
+            return this.lastResponse;
         }
     }
 }

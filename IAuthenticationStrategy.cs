@@ -1,5 +1,3 @@
-using System;
-
 using PayPal.Authentication;
 
 namespace PayPal

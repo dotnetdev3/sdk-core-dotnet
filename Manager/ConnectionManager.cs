@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Net;
 using log4net;
 using PayPal.Exception;

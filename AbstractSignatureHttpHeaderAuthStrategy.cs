@@ -44,9 +44,9 @@ namespace PayPal
                     headers.Add(BaseConstants.PAYPAL_SECURITY_SIGNATURE_HEADER,signCredential.Signature);
                 }
             }
-            catch (OAuthException)
+            catch (OAuthException ae)
             {
-                throw;
+                throw ae;
             }
             return headers;
         }
@@ -57,6 +57,6 @@ namespace PayPal
         /// <param name="credentialSignature"></param>
         /// <param name="tokenAuthorization"></param>
         /// <returns></returns>
-        protected abstract Dictionary<string, string> ProcessTokenAuthorization(SignatureCredential credentialSignature, TokenAuthorization tokenAuthorization);
+        protected abstract Dictionary<string, string> ProcessTokenAuthorization(SignatureCredential signCredential, TokenAuthorization toknAuthorization);
     }
 }

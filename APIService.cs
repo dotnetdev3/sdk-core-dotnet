@@ -1,15 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
-using System.Xml;
 using System.Net;
-using System.Web;
-using System.Text;
 using log4net;
 using PayPal.Manager;
-using PayPal.Authentication;
 using PayPal.Exception;
-using System.Collections.Generic;
 
 namespace PayPal
 {
@@ -97,9 +93,9 @@ namespace PayPal
                         throw new ConnectionException("Invalid HTTP response " + we.Message);
                     }
                 }
-                catch
+                catch(System.Exception ex)
                 {
-                    throw;
+                    throw ex;
                 }
             } while (retries++ < numRetries);
             throw new ConnectionException("Invalid HTTP response");

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using log4net;
 
 namespace PayPal.Exception
@@ -12,10 +9,8 @@ namespace PayPal.Exception
 		/// <summary>
 		/// Represents application configuration errors 
 		/// </summary>
-		public ConfigException() : base()
-		{}
-
-
+        public ConfigException() : base() { }
+        
 		/// <summary>
 		/// Represents errors that occur during application execution
 		/// </summary>
@@ -27,7 +22,6 @@ namespace PayPal.Exception
 				log.Error(message, this);
 			}
 		}
-
 
 		/// <summary>
 		/// Represents errors that occur during application execution

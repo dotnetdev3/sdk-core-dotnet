@@ -90,9 +90,9 @@ namespace PayPal.NVP
                 this.tokenSecret = tokenSecret;
                 InitCredential();
             }
-            catch
+            catch(System.Exception ex)
             {
-                throw;
+                throw ex;
             }		    
 	    }
 
@@ -169,9 +169,9 @@ namespace PayPal.NVP
                     }
                 }
             }
-            catch (OAuthException)
+            catch (OAuthException ae)
             {
-                throw;
+                throw ae;
             }
             return headers;
         }
@@ -228,9 +228,9 @@ namespace PayPal.NVP
                     }
                 }
             }
-            catch
+            catch(System.Exception ex)
             {
-                throw;
+                throw ex;
             }
 		    return returnCredential;
 	    }
@@ -242,12 +242,20 @@ namespace PayPal.NVP
 	    private Dictionary<string, string> GetDefaultHttpHeadersNVP() 
         {
 		    Dictionary<string, string> returnMap = new Dictionary<string, string>();
-            returnMap.Add(BaseConstants.PAYPAL_APPLICATION_ID, GetApplicationID());
-		    returnMap.Add(BaseConstants.PAYPAL_REQUEST_DATA_FORMAT_HEADER, BaseConstants.NVP);
-            returnMap.Add(BaseConstants.PAYPAL_RESPONSE_DATA_FORMAT_HEADER, BaseConstants.NVP);
-            returnMap.Add(BaseConstants.PAYPAL_REQUEST_SOURCE_HEADER, SDKName + "-" + SDKVersion);           
-            returnMap.Add(BaseConstants.PAYPAL_SANDBOX_EMAIL_ADDRESS_HEADER, GetSandboxEmailAddress());
-            returnMap.Add(BaseConstants.PAYPAL_SANDBOX_DEVICE_IPADDRESS, GetDeviceIPAddress());    
+
+            try
+            {
+                returnMap.Add(BaseConstants.PAYPAL_APPLICATION_ID, GetApplicationID());
+                returnMap.Add(BaseConstants.PAYPAL_REQUEST_DATA_FORMAT_HEADER, BaseConstants.NVP);
+                returnMap.Add(BaseConstants.PAYPAL_RESPONSE_DATA_FORMAT_HEADER, BaseConstants.NVP);
+                returnMap.Add(BaseConstants.PAYPAL_REQUEST_SOURCE_HEADER, SDKName + "-" + SDKVersion);
+                returnMap.Add(BaseConstants.PAYPAL_SANDBOX_EMAIL_ADDRESS_HEADER, GetSandboxEmailAddress());
+                returnMap.Add(BaseConstants.PAYPAL_SANDBOX_DEVICE_IPADDRESS, GetDeviceIPAddress());
+            }
+            catch(System.Exception ex)
+            {
+                throw ex;
+            }
 		    return returnMap;
 	    }
 
@@ -277,9 +285,9 @@ namespace PayPal.NVP
                 {
                     credential = GetCredentials();
                 }
-                catch
+                catch (System.Exception ex)
                 {
-                    throw;
+                    throw ex;
                 }                
 		    }
 	    }

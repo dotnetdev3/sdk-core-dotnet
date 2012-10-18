@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using log4net;
 
 namespace PayPal.Exception
@@ -13,8 +10,7 @@ namespace PayPal.Exception
 		/// Represents errors that occur during application execution
 		/// </summary>
 		public MissingCredentialException() : base() {}
-
-
+        
 		/// <summary>
 		/// Represents errors that occur during application execution
 		/// </summary>
@@ -26,8 +22,7 @@ namespace PayPal.Exception
 				log.Error(message, this);
 			}
 		}
-
-
+        
 		/// <summary>
 		/// Represents errors that occur during application execution
 		/// </summary>

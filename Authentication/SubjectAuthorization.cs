@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PayPal.Authentication
 {
@@ -15,13 +13,13 @@ namespace PayPal.Authentication
         /// Constructor
         /// </summary>
         /// <param name="subject"></param>
-        public SubjectAuthorization(string subject) : base()
+        public SubjectAuthorization(string subjct) : base()
         {
-            if (string.IsNullOrEmpty(subject))
+            if (string.IsNullOrEmpty(subjct))
             {
                 throw new ArgumentException("SubjectAuthorization arguments cannot be null or empty");
             }
-            this.subjct = subject;
+            this.subjct = subjct;
         }
 
         /// <summary>
