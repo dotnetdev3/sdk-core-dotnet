@@ -54,7 +54,7 @@
     <Compile Include="BasePayPalService.cs" />
     <Compile Include="DefaultSOAPAPICallHandler.cs" />
     <Compile Include="NVP\CertificateHttpHeaderAuthStrategy.cs" />
-    <Compile Include="NVP\NVPAPICallPreHandler.cs" />
+    <Compile Include="NVP\PlatformAPICallPreHandler.cs" />
     <Compile Include="NVP\SignatureHttpHeaderAuthStrategy.cs" />
     <Compile Include="SOAP\CertificateHttpHeaderAuthStrategy.cs" />
     <Compile Include="SOAP\CertificateSOAPHeaderAuthStrategy.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="OAuth\PayPalURLEncoder.cs" />
     <Compile Include="SOAP\SignatureHttpHeaderAuthStrategy.cs" />
     <Compile Include="SOAP\SignatureSOAPHeaderAuthStrategy.cs" />
-    <Compile Include="SOAP\SOAPAPICallPreHandler.cs" />
+    <Compile Include="SOAP\MerchantAPICallPreHandler.cs" />
     <Compile Include="Util\NVPUtil.cs" />
     <Compile Include="Util\ReadCert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
