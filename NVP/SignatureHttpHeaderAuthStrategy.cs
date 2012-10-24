@@ -26,7 +26,7 @@ namespace PayPal.NVP
         /// <param name="sigCred"></param>
         /// <param name="tokenAuth"></param>
         /// <returns></returns>
-        protected override Dictionary<string, string> ProcessTokenAuthorization(
+        public override Dictionary<string, string> ProcessTokenAuthorization(
                 SignatureCredential signCredential, TokenAuthorization toknAuthorization)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();

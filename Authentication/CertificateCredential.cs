@@ -47,8 +47,8 @@ namespace PayPal.Authentication
         /// <param name="appID"></param>
         /// <param name="certFile"></param>
         /// <param name="priKeyPassword"></param>
-        public CertificateCredential(string usrName, string pasWord, string appID, 
-            string certFile, string priKeyPassword) : base()
+        public CertificateCredential(string usrName, string pasWord, string certFile, string priKeyPassword) 
+            : base()
         {
             if (string.IsNullOrEmpty(usrName) || string.IsNullOrEmpty(pasWord) ||
                 string.IsNullOrEmpty(certFile) || string.IsNullOrEmpty(priKeyPassword))
@@ -57,7 +57,6 @@ namespace PayPal.Authentication
             }
             this.usrName = usrName;
             this.pasWord = pasWord;
-            this.appID = appID;
             this.certFile = certFile;
             this.priKeyPassword = priKeyPassword;
         }                    
@@ -71,10 +70,9 @@ namespace PayPal.Authentication
         /// <param name="certFile"></param>
         /// <param name="priKeyPassword"></param>
         /// <param name="thrdPartyAuthorization"></param>
-        public CertificateCredential(string usrName, string pasWord,
-                string appID, string certFile,
-                string priKeyPassword, IThirdPartyAuthorization thrdPartyAuthorization)
-            : this(usrName, pasWord, appID, certFile, priKeyPassword)
+        public CertificateCredential(string usrName, string pasWord, string certFile, string priKeyPassword, 
+            IThirdPartyAuthorization thrdPartyAuthorization)
+            : this(usrName, pasWord, certFile, priKeyPassword)
         {
            this.thrdPartyAuthorization = thrdPartyAuthorization;
         }   

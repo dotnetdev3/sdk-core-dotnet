@@ -41,8 +41,8 @@ namespace PayPal.Authentication
         /// <param name="pssword"></param>
         /// <param name="appID"></param>
         /// <param name="sign"></param>
-        public SignatureCredential(string usrName, string pssword,
-                string appID, string sign) : base()
+        public SignatureCredential(string usrName, string pssword, string sign) 
+            : base()
         {
             if (string.IsNullOrEmpty(usrName) || string.IsNullOrEmpty(pssword) ||
                 string.IsNullOrEmpty(sign))
@@ -51,7 +51,6 @@ namespace PayPal.Authentication
             }
             this.usrName = usrName;
             this.pasWord = pssword;
-            this.appID = appID;
             this.sign = sign;
         }
 
@@ -63,10 +62,9 @@ namespace PayPal.Authentication
         /// <param name="appID"></param>
         /// <param name="sign"></param>
         /// <param name="thrdPartyAuthorization"></param>       
-        public SignatureCredential(string usrName, string pasWord,
-                string appID, string sign,
-                IThirdPartyAuthorization thrdPartyAuthorization)
-            : this(usrName, pasWord, appID, sign)
+        public SignatureCredential(string usrName, string pasWord, string sign, 
+            IThirdPartyAuthorization thrdPartyAuthorization)
+            : this(usrName, pasWord, sign)
         {
 
             this.thrdPartyAuthorization = thrdPartyAuthorization;

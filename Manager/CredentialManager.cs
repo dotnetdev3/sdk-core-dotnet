@@ -74,7 +74,8 @@ namespace PayPal.Manager
             }
             if (!string.IsNullOrEmpty(accnt.APICertificate))
             {
-                CertificateCredential certCredential = new CertificateCredential(accnt.APIUsername, accnt.APIPassword, accnt.ApplicationId, accnt.APICertificate, accnt.PrivateKeyPassword);
+                CertificateCredential certCredential = new CertificateCredential(accnt.APIUsername, accnt.APIPassword, accnt.APICertificate, accnt.PrivateKeyPassword);
+                certCredential.ApplicationID = accnt.ApplicationId;
                 if (!string.IsNullOrEmpty(accnt.CertificateSubject))
                 {
                     SubjectAuthorization subAuthorization = new SubjectAuthorization(accnt.CertificateSubject);
@@ -84,7 +85,8 @@ namespace PayPal.Manager
             }
             else
             {
-                SignatureCredential signCredential = new SignatureCredential(accnt.APIUsername, accnt.APIPassword, accnt.ApplicationId, accnt.APISignature);
+                SignatureCredential signCredential = new SignatureCredential(accnt.APIUsername, accnt.APIPassword, accnt.APISignature);
+                signCredential.ApplicationID = accnt.ApplicationId;
                 if (!string.IsNullOrEmpty(accnt.SignatureSubject))
                 {
                     SubjectAuthorization subjectAuthorization = new SubjectAuthorization(accnt.SignatureSubject);
