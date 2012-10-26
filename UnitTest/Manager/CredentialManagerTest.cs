@@ -28,7 +28,7 @@ namespace PayPal.UnitTest.Manager
         [Test]
         public void loadCertificateCredential()
         {
-            string apiUsername = "jb-us-seller2_api1.paypal.com";
+            string apiUsername = "certuser_biz_api1.paypal.com";
             CredentialManager mgr = CredentialManager.Instance;
             ICredential cred = mgr.GetCredentials(apiUsername);
             Assert.NotNull(cred);
@@ -36,10 +36,10 @@ namespace PayPal.UnitTest.Manager
 
             CertificateCredential cert = (CertificateCredential)cred;
             Assert.AreEqual(apiUsername, cert.UserName);
-            Assert.AreEqual("Y382QH72D4MQYJT3", cert.Password);
-            Assert.AreEqual("C:/certs/paypal.p12", cert.CertificateFile);
-            Assert.AreEqual("11111111", cert.PrivateKeyPassword);
-            Assert.AreEqual("APP-5XV204960S3290106", cert.ApplicationID);
+            Assert.AreEqual("D6JNKKULHN3G5B8A", cert.Password);
+            Assert.AreEqual(UnitTestConstants.CERT_PATH, cert.CertificateFile);
+            Assert.AreEqual(UnitTestConstants.CERT_PASSWORD, cert.PrivateKeyPassword);
+            Assert.AreEqual("APP-80W284485P519543T", cert.ApplicationID);
         }
 
         [Test]

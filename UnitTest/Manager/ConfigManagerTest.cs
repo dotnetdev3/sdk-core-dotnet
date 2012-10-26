@@ -49,7 +49,7 @@ namespace PayPal.UnitTest.Manager
 
             string connectionTimeout = mgr.GetProperty("connectionTimeout");
             Assert.IsNotNull(connectionTimeout);
-            Assert.AreEqual(connectionTimeout, "360000");
+            Assert.AreEqual("360000", connectionTimeout);
         }
 
         [Test]

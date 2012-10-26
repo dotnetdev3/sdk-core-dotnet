@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using PayPal.Authentication;
-using PayPal.Exception;
 
 namespace PayPal.UnitTest.Authentication
 {
@@ -14,15 +13,24 @@ namespace PayPal.UnitTest.Authentication
         {
             cred = new CertificateCredential(
                     "platfo_1255077030_biz_api1.gmail.com", "1255077037",
-                    "sdk-cert.p12", "KJAERUGBLVF6Y");
-            if (cred == null)
-            {
-                throw new MissingCredentialException("Missing credentials for " + UnitTestConstants.API_USER_NAME);
-            }
+                    "sdk-cert.p12", "KJAERUGBLVF6Y");          
         }
 
         [Test]
-        public void CertificatePathTest()
+        public void UserNameTest()
+        {
+            Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com", cred.UserName);
+        }
+
+
+        [Test]
+        public void PasswordTest()
+        {
+            Assert.AreEqual("1255077037", cred.Password);
+        }
+
+        [Test]
+        public void CertificateFileTest()
         {
             Assert.AreEqual("sdk-cert.p12", cred.CertificateFile);
         }
@@ -32,19 +40,7 @@ namespace PayPal.UnitTest.Authentication
         {
             Assert.AreEqual("KJAERUGBLVF6Y", cred.PrivateKeyPassword);
         }
-
-        [Test]
-        public void PasswordTest()
-        {
-            Assert.AreEqual("1255077037", cred.Password);
-        }
-
-        [Test]
-        public void UserNameTest()
-        {
-            Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com", cred.UserName);
-        }
-
+        
         [Test]
         public void ApplicationIDTest()
         {

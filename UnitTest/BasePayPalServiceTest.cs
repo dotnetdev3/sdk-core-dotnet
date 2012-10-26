@@ -11,8 +11,11 @@ namespace PayPal.UnitTest
         public void CallServiceTest()
         {
             BasePayPalService service = new BasePayPalService();
-            IAPICallPreHandler apiCallHandler = new PlatformAPICallPreHandler("payload", "servicename", "method",UnitTestConstants.API_USER_NAME, UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
-            string response = service.Call(apiCallHandler);
+            string payload = "requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
+            IAPICallPreHandler handler = new PlatformAPICallPreHandler(payload,
+                    "AdaptivePayments", "ConvertCurrency",
+                    UnitTestConstants.API_USER_NAME, null, null);
+            string response = service.Call(handler);
             Assert.IsNotNull(response);
             StringAssert.Contains("responseEnvelope.ack", response);
         }

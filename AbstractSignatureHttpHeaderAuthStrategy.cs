@@ -54,9 +54,9 @@ namespace PayPal
         /// <summary>
         /// Process Token Authorization based on API format
         /// </summary>
-        /// <param name="credentialSignature"></param>
-        /// <param name="tokenAuthorization"></param>
+        /// <param name="signCredential"></param>
+        /// <param name="toknAuthorization"></param>
         /// <returns></returns>
-        public abstract Dictionary<string, string> ProcessTokenAuthorization(SignatureCredential signCredential, TokenAuthorization toknAuthorization);
+        protected internal abstract Dictionary<string, string> ProcessTokenAuthorization(SignatureCredential signCredential, TokenAuthorization toknAuthorization);
     }
 }

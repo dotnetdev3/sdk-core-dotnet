@@ -9,5 +9,8 @@ namespace PayPal.UnitTest
 	    public const string API_ENDPOINT = "https://svcs.sandbox.paypal.com/";
 	    public const string ACCESS_TOKEN = "AhARVvVPBOlOICu1xkH29I53ZvD.0p-vYauZhyWnKxMb5861PXG82Q";
 	    public const string TOKEN_SECRET = "Ctsch..an4Bgx0I75X8CTNxqRn8";
+
+        public const string CERT_PATH = "C:\\GitClone\\sdk-core\\DOTNET\\UnitTest\\Resources\\sdk-cert.p12";
+        public const string CERT_PASSWORD = "password";
     }
 }

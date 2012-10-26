@@ -15,11 +15,6 @@ namespace PayPal.UnitTest.Authentication
             cred = new SignatureCredential("platfo_1255077030_biz_api1.gmail.com",
                     "1255077037",
                     "Abg0gYcQyxQvnf2HDJkKtA-p6pqhA1k-KTYE0Gcy1diujFio4io5Vqjf");
-
-            if (cred == null)
-            {
-                throw new MissingCredentialException("Missing credentials for " + UnitTestConstants.API_USER_NAME);
-            }
         }
 
         [Test]

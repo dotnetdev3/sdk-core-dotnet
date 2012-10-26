@@ -10,15 +10,15 @@ namespace PayPal.UnitTest.NVP
     class SignatureHttpHeaderAuthStrategyTest
     {
         [Test]
-        public void ProcessTokenAuthorizationTest()
+        public void GenerateHeaderStrategyWithTokenTest()
         {
             SignatureHttpHeaderAuthStrategy signatureHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy("https://svcs.sandbox.paypal.com/");
-            TokenAuthorization tokenAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
-            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");           
-            Dictionary<string, string> header = signatureHttpHeaderAuthStrategy.ProcessTokenAuthorization(signatureCredential, tokenAuthorization);
-            string authHeader = (string)header["X-PAYPAL-AUTHORIZATION"];
+            TokenAuthorization tokenAuthorization = new TokenAuthorization(UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
+            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature", tokenAuthorization);
+            Dictionary<string, string> header = signatureHttpHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
+            string authHeader = header[BaseConstants.PAYPAL_AUTHORIZATION_PLATFORM];
             string[] headers = authHeader.Split(',');
-            Assert.AreEqual("token=accessToken", headers[0]);
+            Assert.AreEqual("token=" + UnitTestConstants.ACCESS_TOKEN, headers[0]);
         }  
 
         [Test]

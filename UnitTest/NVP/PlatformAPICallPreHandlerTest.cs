@@ -18,11 +18,20 @@ namespace PayPal.UnitTest.NVP
         }
 
         [Test]
-        public void GetHeaderMapSignatureWithoutTokenTest(ConfigManager config)
+        public void HeaderMapWithSignatureWithTokenTest()
+        {
+            PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", "jb-us-seller_api1.paypal.com", "accessToken", "tokenSecret");
+            Dictionary<string, string> header = platformApiCaller.GetHeaderMap();
+            string authHeader = header["X-PAYPAL-AUTHORIZATION"];
+            string[] headers = authHeader.Split(',');
+            Assert.AreEqual("token=accessToken", headers[0]);
+        }
+
+        [Test]
+        public void HeaderMapSignatureWithoutTokenTest()
         {
             ICredential signatureCredential = credentialmgr.GetCredentials("jb-us-seller_api1.paypal.com");
-            PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", signatureCredential);
-            
+            PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", signatureCredential);            
             Dictionary<string, string> header = platformApiCaller.GetHeaderMap();
             Assert.AreEqual("jb-us-seller_api1.paypal.com", header["X-PAYPAL-SECURITY-USERID"]);
             Assert.AreEqual("WX4WTU3S8MY44S7F", header["X-PAYPAL-SECURITY-PASSWORD"]);
@@ -33,39 +42,35 @@ namespace PayPal.UnitTest.NVP
         }
 
         [Test]
-        public void GetHeaderMapCertificateWithoutTokenTest(ConfigManager config)
-        {
-            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
-            PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", certificateCredential);
-            Dictionary<string, string> header = platformApiCaller.GetHeaderMap();
-            Assert.AreEqual("certuser_biz_api1.paypal.com", header["X-PAYPAL-SECURITY-USERID"]);
-            Assert.AreEqual("D6JNKKULHN3G5B8A", header["X-PAYPAL-SECURITY-PASSWORD"]);
-            Assert.IsNull(header["X-PAYPAL-SECURITY-SIGNATURE"]);
-            Assert.AreEqual("APP-80W284485P519543T", header["X-PAYPAL-APPLICATION-ID"]);
-            Assert.AreEqual("NV", header["X-PAYPAL-REQUEST-DATA-FORMAT"]);
-            Assert.AreEqual("NV", header["X-PAYPAL-RESPONSE-DATA-FORMAT"]);
-        }
-
-        [Test]
-        public void GetHeaderMapWithSignatureUserTokenTest(ConfigManager config)
-        {
-            PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", "jb-us-seller_api1.paypal.com", "accessToken", "tokenSecret");
-            Dictionary<string, string> header = platformApiCaller.GetHeaderMap();
-            string authHeader = (string)header["X-PAYPAL-AUTHORIZATION"];
-            string[] headers = authHeader.Split(',');
-            Assert.AreEqual("token=accessToken", headers[0]);
-        }
-
-        [Test]
-        public void GetHeaderMapWithCertificateUserTokenTest(ConfigManager config)
+        public void HeaderMapWithCertificateWithTokenTest()
         {
             PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", "certuser_biz_api1.paypal.com", "accessToken", "tokenSecret");
             Dictionary<string, string> header = platformApiCaller.GetHeaderMap();
-            string authHeader = (string)header["X-PAYPAL-AUTHORIZATION"];
+            
+            //string authHeader = (string)header["X-PAYPAL-AUTHORIZATION"];
+            //string[] headers = authHeader.Split(',');
+            //Assert.AreEqual("token=accessToken", headers[0]);
+
+            string authHeader = header[BaseConstants.PAYPAL_AUTHORIZATION_PLATFORM];
             string[] headers = authHeader.Split(',');
             Assert.AreEqual("token=accessToken", headers[0]);
         }
 
+        [Test]
+        public void HeaderMapCertificateWithoutTokenTest()
+        {
+            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
+            PlatformAPICallPreHandler platformApiCaller = new PlatformAPICallPreHandler("payload", "servicename", "method", certificateCredential);
+
+            Dictionary<string, string> header = platformApiCaller.GetHeaderMap();
+            Assert.AreEqual("certuser_biz_api1.paypal.com", header["X-PAYPAL-SECURITY-USERID"]);
+            Assert.AreEqual("D6JNKKULHN3G5B8A", header["X-PAYPAL-SECURITY-PASSWORD"]);
+            Assert.AreEqual("APP-80W284485P519543T", header["X-PAYPAL-APPLICATION-ID"]);
+            Assert.AreEqual(BaseConstants.NVP, header["X-PAYPAL-REQUEST-DATA-FORMAT"]);
+            Assert.AreEqual(BaseConstants.NVP, header["X-PAYPAL-RESPONSE-DATA-FORMAT"]);
+        }  
+        
+        
         [Test]
         public void PayloadEndpointCredentialTest()
         {

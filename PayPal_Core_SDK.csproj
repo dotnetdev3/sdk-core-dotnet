@@ -42,6 +42,9 @@
   <ItemGroup>
     <Compile Include="AbstractCertificateHttpHeaderAuthStrategy.cs" />
     <Compile Include="AbstractSignatureHttpHeaderAuthStrategy.cs" />
+    <Compile Include="BasePayPalService.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="IAPICallPreHandler.cs" />
     <Compile Include="APIService.cs" />
     <Compile Include="IAuthenticationStrategy.cs" />
@@ -51,7 +54,6 @@
     <Compile Include="Authentication\SubjectAuthorization.cs" />
     <Compile Include="Authentication\ThirdPartyAuthorization.cs" />
     <Compile Include="Authentication\TokenAuthorization.cs" />
-    <Compile Include="BasePayPalService.cs" />
     <Compile Include="DefaultSOAPAPICallHandler.cs" />
     <Compile Include="NVP\CertificateHttpHeaderAuthStrategy.cs" />
     <Compile Include="NVP\PlatformAPICallPreHandler.cs" />

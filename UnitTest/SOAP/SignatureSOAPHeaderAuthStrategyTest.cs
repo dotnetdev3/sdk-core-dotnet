@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using NUnit.Framework;
 using PayPal.Authentication;
 using PayPal.SOAP;
@@ -10,89 +11,83 @@ namespace PayPal.UnitTest.SOAP
     class SignatureSOAPHeaderAuthStrategyTest
     {
         [Test]
-        public void generateHeaderStrategyForTokenTest()
+        public void GenerateHeaderStrategyTest()
+        {
+            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
+            SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
+            string payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
+
+            XmlDocument xmlDoc = GetXmlDocument(payload);
+            XmlNodeList xmlNodeListUsername = xmlDoc.GetElementsByTagName("Username");
+            Assert.IsTrue(xmlNodeListUsername.Count > 0);
+            Assert.AreEqual("testusername", xmlNodeListUsername[0].InnerXml);
+
+            XmlNodeList xmlNodeListPassword = xmlDoc.GetElementsByTagName("Password");
+            Assert.IsTrue(xmlNodeListPassword.Count > 0);
+            Assert.AreEqual("testpassword", xmlNodeListPassword[0].InnerXml);
+
+            XmlNodeList xmlNodeListSignature = xmlDoc.GetElementsByTagName("Signature");
+            Assert.IsTrue(xmlNodeListSignature.Count > 0);
+            Assert.AreEqual("testsignature", xmlNodeListSignature[0].InnerXml);
+        }
+
+        [Test]
+        public void GenerateHeaderStrategyTokenTest()
         {
             SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
             TokenAuthorization tokenAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
-            signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization =tokenAuthorization;
+            signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization = tokenAuthorization;
             signatureCredential.ThirdPartyAuthorization =tokenAuthorization;
-            String payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
+            string payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
             Assert.AreEqual("<ns:RequesterCredentials/>", payload);
-        }
+        }               
 
         [Test]
-        public void generateHeaderStrategyForSubjectTest()
+        public void GenerateHeaderStrategyThirdPartyTest()
         {
             SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
             SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");
             signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subjectAuthorization;
             signatureCredential.ThirdPartyAuthorization = subjectAuthorization;
-            String payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
+            string payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
+            
+            XmlDocument xmlDoc = GetXmlDocument(payload);
+            XmlNodeList NodeListUsername = xmlDoc.GetElementsByTagName("Username");            
+            Assert.IsTrue(NodeListUsername.Count > 0);
+            Assert.AreEqual("testusername", NodeListUsername[0].InnerXml);
 
+            XmlNodeList xmlNodeListPassword = xmlDoc.GetElementsByTagName("Password");
+            Assert.IsTrue(xmlNodeListPassword.Count > 0);
+            Assert.AreEqual("testpassword", xmlNodeListPassword[0].InnerXml);
 
-            Document dom = loadXMLFromString(payload);
-            Element docEle = dom.getDocumentElement();
-            NodeList credential = docEle.getElementsByTagName("ebl:Credentials");
-            NodeList user = ((Element)credential.item(0)).getElementsByTagName("ebl:Username");
-            NodeList psw = ((Element)credential.item(0)).getElementsByTagName("ebl:Password");
-            NodeList sign = ((Element)credential.item(0)).getElementsByTagName("ebl:Signature");
-            NodeList subject = ((Element)credential.item(0)).getElementsByTagName("ebl:Subject");
+            XmlNodeList xmlNodeListSignature = xmlDoc.GetElementsByTagName("Signature");
+            Assert.IsTrue(xmlNodeListSignature.Count > 0);
+            Assert.AreEqual("testsignature", xmlNodeListSignature[0].InnerXml);
 
-            String username = user.item(0).getTextContent();
-            String password = psw.item(0).getTextContent();
-            String signature = sign.item(0).getTextContent();
-            String sub = subject.item(0).getTextContent();
-
-            Assert.AreEqual("testusername", username);
-            Assert.AreEqual("testpassword", password);
-            Assert.AreEqual("testsignature", signature);
-            Assert.AreEqual("testsubject", sub);
-        }
+            XmlNodeList xmlNodeListSubject = xmlDoc.GetElementsByTagName("Subject");
+            Assert.IsTrue(xmlNodeListSubject.Count > 0);
+            Assert.AreEqual("testsubject", xmlNodeListSubject[0].InnerXml);
+        }       
 
         [Test]
-        public void generateHeaderStrategyForNonThirdPartyTest()
-        {
-            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
-            SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-            String payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
-
-            Document dom = loadXMLFromString(payload);
-            Element docEle = dom.getDocumentElement();
-            NodeList credential = docEle.getElementsByTagName("ebl:Credentials");
-            NodeList user = ((Element)credential.item(0)).getElementsByTagName("ebl:Username");
-            NodeList psw = ((Element)credential.item(0)).getElementsByTagName("ebl:Password");
-            NodeList sign = ((Element)credential.item(0)).getElementsByTagName("ebl:Signature");
-            NodeList subject = ((Element)credential.item(0)).getElementsByTagName("ebl:Subject");
-
-            String username = user.item(0).getTextContent();
-            String password = psw.item(0).getTextContent();
-            String signature = sign.item(0).getTextContent();
-            Object sub = subject.item(0);
-
-            Assert.AreEqual("testusername", username);
-            Assert.AreEqual("testpassword", password);
-            Assert.AreEqual("testsignature", signature);
-            Assert.IsNull(sub);
-        }
-
-        [Test]
-        public void setGetThirdPartyAuthorization()
+        public void ThirdPartyAuthorizationTest()
         {
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
             SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");
             signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subjectAuthorization;
             Assert.IsNotNull(signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization);
+            Assert.AreEqual("testsubject", ((PayPal.Authentication.SubjectAuthorization)(signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization)).Subject);
         }
-
-        //TODO:
-        // private XmlDocument loadXMLFromString(String xml)
-        private Document loadXMLFromString(String xml)
+        
+        private XmlDocument GetXmlDocument(string xmlString)
         {
-            ByteArrayInputStream stream = new ByteArrayInputStream(xml.getBytes());
-            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-            return builder.parse(stream);
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlString = xmlString.Replace("ns:", string.Empty);
+            xmlString = xmlString.Replace("ebl:", string.Empty);
+            xmlDoc.LoadXml(xmlString);
+            return xmlDoc;
         }
     }
 }

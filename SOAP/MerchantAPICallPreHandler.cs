@@ -260,8 +260,8 @@ namespace PayPal.SOAP
 	    private Dictionary<string, string> GetDefaultHttpHeadersSOAP() 
         {
 		    Dictionary<string, string> returnMap = new Dictionary<string, string>();
-		    returnMap.Add(BaseConstants.PAYPAL_REQUEST_DATA_FORMAT_HEADER, "SOAP");
-		    returnMap.Add(BaseConstants.PAYPAL_RESPONSE_DATA_FORMAT_HEADER, "SOAP");
+		    returnMap.Add(BaseConstants.PAYPAL_REQUEST_DATA_FORMAT_HEADER, BaseConstants.SOAP);
+            returnMap.Add(BaseConstants.PAYPAL_RESPONSE_DATA_FORMAT_HEADER, BaseConstants.SOAP);
             returnMap.Add(BaseConstants.PAYPAL_REQUEST_SOURCE_HEADER, SDKName + "-" + SDKVersion);
 		    return returnMap;
 	    }        
@@ -303,7 +303,7 @@ namespace PayPal.SOAP
 	    /// <returns></returns>
 	    private string GetPayLoadUsingSOAPHeader(string payLoad, string namespaces, string header) 
         {
-		    string returnPayLoad = null;
+            string returnPayLoad = null;
 		    string formattedPayLoad = payLoad;
 		    returnPayLoad = string.Format(formattedPayLoad, new object[] {namespaces, header});
 		    return returnPayLoad;

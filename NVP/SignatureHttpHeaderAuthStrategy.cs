@@ -20,13 +20,14 @@ namespace PayPal.NVP
         /// <param name="endPointUrl"></param>
         public SignatureHttpHeaderAuthStrategy(string endpointURL) : base(endpointURL) { }
 
-	    /// <summary>
+	    
+        /// <summary>
         /// Processing TokenAuthorization} using SignatureCredential
         /// </summary>
-        /// <param name="sigCred"></param>
-        /// <param name="tokenAuth"></param>
+        /// <param name="signCredential"></param>
+        /// <param name="toknAuthorization"></param>
         /// <returns></returns>
-        public override Dictionary<string, string> ProcessTokenAuthorization(
+        protected internal override Dictionary<string, string> ProcessTokenAuthorization(
                 SignatureCredential signCredential, TokenAuthorization toknAuthorization)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
