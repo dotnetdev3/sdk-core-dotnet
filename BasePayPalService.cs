@@ -1,6 +1,6 @@
 namespace PayPal
 {
-    public class BasePayPalService
+    public abstract class BasePayPalService
     {       
        private string accessToken;
        private string accessTokenSecret;

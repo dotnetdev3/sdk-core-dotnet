@@ -22,7 +22,7 @@ namespace PayPal.UnitTest.SOAP
         }
 
         [Test]
-        public void HeaderMapSignatureTest()
+        public void GetHeaderMapSignature()
         {
             ICredential signatureCredential = credentialmgr.GetCredentials("jb-us-seller_api1.paypal.com");
             MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, signatureCredential);
@@ -37,7 +37,7 @@ namespace PayPal.UnitTest.SOAP
         }
 
         [Test]
-        public void HeaderMapCertificateTest(ConfigManager conf)
+        public void GetHeaderMapCertificate()
         {
             ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
             MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
@@ -93,7 +93,7 @@ namespace PayPal.UnitTest.SOAP
         }
         
         [Test]
-        public void SDKNameTest()
+        public void SDKName()
         {
             ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
             MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
@@ -102,7 +102,7 @@ namespace PayPal.UnitTest.SOAP
         }
 
         [Test]
-        public void SDKVersionTest()
+        public void SDKVersion()
         {
             ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
             MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
@@ -111,7 +111,7 @@ namespace PayPal.UnitTest.SOAP
         }
 
         [Test]
-        public void GetEndPointTest()
+        public void GetEndPoint()
         {
             ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
             MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
@@ -127,6 +127,5 @@ namespace PayPal.UnitTest.SOAP
             xmlDoc.LoadXml(xmlString);
             return xmlDoc;
         }
-
     }
 }

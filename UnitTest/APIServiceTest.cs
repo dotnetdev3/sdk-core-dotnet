@@ -8,12 +8,13 @@ using PayPal.SOAP;
 
 namespace PayPal.UnitTest
 {
+    [TestFixture]
     class APIServiceTest
     {
         [Test]
-        public void MakeRequestUsingNVPSignatureCredentialTest()
+        public void MakeRequestUsingNVPSignatureCredential()
         {
-            string payload = "requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
+            string payload = @"requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
             IAPICallPreHandler handler = new PlatformAPICallPreHandler(payload,
                     "AdaptivePayments", "ConvertCurrency",
                     UnitTestConstants.API_USER_NAME, null, null);
@@ -24,7 +25,7 @@ namespace PayPal.UnitTest
         }
 
         [Test]
-        public void MakeRequestUsingSOAPSignatureCredentialTest()
+        public void MakeRequestUsingSOAPSignatureCredential()
         {
             string payload = "<ns:GetBalanceReq><ns:GetBalanceRequest><ebl:Version>94.0</ebl:Version></ns:GetBalanceRequest></ns:GetBalanceReq>";
             DefaultSOAPAPICallHandler apiCallHandler = new DefaultSOAPAPICallHandler(
@@ -38,9 +39,9 @@ namespace PayPal.UnitTest
         }
 
         [Test]
-        public void MakeRequestUsingNVPCertificateCredentialTest()
+        public void MakeRequestUsingNVPCertificateCredential()
         {
-            string payload = "requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
+            string payload = @"requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
             IAPICallPreHandler handler = new PlatformAPICallPreHandler(payload,
                     "AdaptivePayments", "ConvertCurrency",
                     "certuser_biz_api1.paypal.com", null, null);

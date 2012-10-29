@@ -10,7 +10,7 @@ namespace PayPal.UnitTest.SOAP
     class CertificateHttpHeaderAuthStrategyTest
     {
         [Test]
-        public void GenerateHeaderStrategyWithTokenTest()
+        public void GenerateHeaderStrategyWithToken()
         {
             CertificateHttpHeaderAuthStrategy certificateHttpHeaderAuthStrategy = new CertificateHttpHeaderAuthStrategy("https://api-3t.sandbox.paypal.com/2.0");                                 
             TokenAuthorization tokenAuthorization = new TokenAuthorization(UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
@@ -23,7 +23,7 @@ namespace PayPal.UnitTest.SOAP
         }
 
         [Test]
-        public void GenerateHeaderStrategyWithoutTokenTest()
+        public void GenerateHeaderStrategyWithoutToken()
         {
             CertificateHttpHeaderAuthStrategy certificateHttpHeaderAuthStrategy = new CertificateHttpHeaderAuthStrategy("https://svcs.sandbox.paypal.com/");
             CertificateCredential certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");

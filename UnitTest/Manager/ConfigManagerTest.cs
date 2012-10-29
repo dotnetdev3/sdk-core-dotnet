@@ -11,7 +11,7 @@ namespace PayPal.UnitTest.Manager
     class ConfigManagerTest
     {
         [Test]
-        public void retrieveAccountConfigByIndex()
+        public void RetrieveAccountConfigByIndex()
         {
             ConfigManager mgr = ConfigManager.Instance;
             Account acc = mgr.GetAccount(0);
@@ -20,7 +20,7 @@ namespace PayPal.UnitTest.Manager
         }
 
         [Test]
-        public void retrieveAccountConfigByUsername()
+        public void RetrieveAccountConfigByUsername()
         {
             ConfigManager mgr = ConfigManager.Instance;
             Account acc = mgr.GetAccount("jb-us-seller_api1.paypal.com");
@@ -32,7 +32,7 @@ namespace PayPal.UnitTest.Manager
         }
 
         [Test]
-        public void retrieveNonExistentAccount()
+        public void RetrieveNonExistentAccount()
         {
             ConfigManager mgr = ConfigManager.Instance;
             Account acc = mgr.GetAccount("i-do-not-exist_api1.paypal.com");
@@ -40,7 +40,7 @@ namespace PayPal.UnitTest.Manager
         }
 
         [Test]
-        public void retrieveValidProperty()
+        public void RetrieveValidProperty()
         {
             ConfigManager mgr = ConfigManager.Instance;
             string endpoint = mgr.GetProperty("endpoint");
@@ -53,7 +53,7 @@ namespace PayPal.UnitTest.Manager
         }
 
         [Test]
-        public void retrieveNonExistentProperty()
+        public void RetrieveNonExistentProperty()
         {
             ConfigManager mgr = ConfigManager.Instance;
             string endpoint = mgr.GetProperty("endpointMisspelt");

@@ -41,6 +41,7 @@
     <Compile Include="Authentication\SubjectAuthorizationTest .cs" />
     <Compile Include="Authentication\TokenAuthorizationTest.cs" />
     <Compile Include="BasePayPalServiceTest.cs" />
+    <Compile Include="DefaultSOAPAPICallHandlerTest.cs" />
     <Compile Include="Manager\ConfigManagerTest.cs" />
     <Compile Include="Manager\ConnectionManagerTest.cs" />
     <Compile Include="Manager\CredentialManagerTest.cs" />
@@ -58,14 +59,14 @@
     <Compile Include="UnitTestConstants.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+    <None Include="Resources\sdk-cert.p12" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\PayPal_Core_SDK.csproj">
       <Project>{1F5FF00B-CE0F-40B8-9BC4-7B5ED2087266}</Project>
       <Name>PayPal_Core_SDK</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Resources\sdk-cert.p12" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -11,7 +11,7 @@ namespace PayPal.UnitTest.Manager
     public class ConnectionManagerTest
     {
         [Test]
-        public void createNewConnection()
+        public void CreateNewConnection()
         {
             ConnectionManager connMgr = ConnectionManager.Instance;
             ConfigManager configMgr = ConfigManager.Instance;
@@ -22,9 +22,8 @@ namespace PayPal.UnitTest.Manager
             Assert.AreEqual(configMgr.GetProperty("connectionTimeout"), httpRequest.Timeout.ToString());            
         }
 
-        [Test]
-        [ExpectedException( typeof(ConfigException) )]
-        public void createNewConnectionWithInvalidURL()
+        [Test, ExpectedException( typeof(ConfigException) )]
+        public void CreateNewConnectionWithInvalidURL()
         {
             ConnectionManager connMgr = ConnectionManager.Instance;
             HttpWebRequest httpRequest = connMgr.GetConnection("Not a url");

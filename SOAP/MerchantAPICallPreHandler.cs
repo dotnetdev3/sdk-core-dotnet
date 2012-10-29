@@ -181,8 +181,7 @@ namespace PayPal.SOAP
                 {
 				    SignatureCredential signCredential = (SignatureCredential) credential;
 				    SignatureSOAPHeaderAuthStrategy signSoapHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-				    signSoapHeaderAuthStrategy.ThirdPartyAuthorization = signCredential.ThirdPartyAuthorization;
-						    
+				    signSoapHeaderAuthStrategy.ThirdPartyAuthorization = signCredential.ThirdPartyAuthorization;						    
 				    header = signSoapHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);
 			    } 
                 else if (credential is CertificateCredential) 

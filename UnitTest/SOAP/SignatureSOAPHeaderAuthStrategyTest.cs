@@ -11,7 +11,7 @@ namespace PayPal.UnitTest.SOAP
     class SignatureSOAPHeaderAuthStrategyTest
     {
         [Test]
-        public void GenerateHeaderStrategyTest()
+        public void GenerateHeaderStrategy()
         {
             SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
@@ -32,7 +32,7 @@ namespace PayPal.UnitTest.SOAP
         }
 
         [Test]
-        public void GenerateHeaderStrategyTokenTest()
+        public void GenerateHeaderStrategyToken()
         {
             SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
@@ -44,7 +44,7 @@ namespace PayPal.UnitTest.SOAP
         }               
 
         [Test]
-        public void GenerateHeaderStrategyThirdPartyTest()
+        public void GenerateHeaderStrategyThirdParty()
         {
             SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
@@ -72,7 +72,7 @@ namespace PayPal.UnitTest.SOAP
         }       
 
         [Test]
-        public void ThirdPartyAuthorizationTest()
+        public void ThirdPartyAuthorization()
         {
             SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
             SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");

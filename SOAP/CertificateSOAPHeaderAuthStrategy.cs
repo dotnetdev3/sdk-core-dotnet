@@ -44,11 +44,11 @@ namespace PayPal.SOAP
 		    } 
             else if (thrdPartyAuthorization is SubjectAuthorization) 
             {
-			    AuthPayLoad(credential, (SubjectAuthorization) thrdPartyAuthorization);
+                payLoad = AuthPayLoad(credential, (SubjectAuthorization)thrdPartyAuthorization);
 		    } 
             else 
             {
-			    AuthPayLoad(credential, null);
+                payLoad = AuthPayLoad(credential, null);
 		    }
 		    return payLoad;
 	    }

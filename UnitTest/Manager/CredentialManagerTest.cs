@@ -10,7 +10,7 @@ namespace PayPal.UnitTest.Manager
     class CredentialManagerTest
     {
         [Test]
-        public void loadSignatureCredential()
+        public void LoadSignatureCredential()
         {
             string apiUsername = "jb-us-seller_api1.paypal.com";
             CredentialManager mgr = CredentialManager.Instance;
@@ -26,7 +26,7 @@ namespace PayPal.UnitTest.Manager
         }
 
         [Test]
-        public void loadCertificateCredential()
+        public void LoadCertificateCredential()
         {
             string apiUsername = "certuser_biz_api1.paypal.com";
             CredentialManager mgr = CredentialManager.Instance;
@@ -42,9 +42,8 @@ namespace PayPal.UnitTest.Manager
             Assert.AreEqual("APP-80W284485P519543T", cert.ApplicationID);
         }
 
-        [Test]
-        [ExpectedException( typeof(MissingCredentialException) )]
-        public void loadCredentialForNonExistentAccount()
+        [Test, ExpectedException( typeof(MissingCredentialException) )]
+        public void LoadCredentialForNonExistentAccount()
         {
             CredentialManager mgr = CredentialManager.Instance;
             ICredential cred = mgr.GetCredentials("i-do-not-exist_api1.paypal.com");

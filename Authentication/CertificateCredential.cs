@@ -88,7 +88,7 @@ namespace PayPal.Authentication
             }
             set
             {
-                value = thrdPartyAuthorization;
+                this.thrdPartyAuthorization = value;
             }
         }
 
