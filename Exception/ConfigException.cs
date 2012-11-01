@@ -4,6 +4,9 @@ namespace PayPal.Exception
 {
     public class ConfigException : System.Exception
     {
+        /// <summary>
+        /// Exception log
+        /// </summary>
 		private static ILog log = LogManager.GetLogger("com.paypal.sdk.exceptions.ConfigException"); 
 
 		/// <summary>

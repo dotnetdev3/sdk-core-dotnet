@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using log4net;
 using PayPal.Manager;
 using PayPal.Exception;
+using PayPal.Authentication;
 
 namespace PayPal
 {
@@ -19,6 +21,14 @@ namespace PayPal
         /// </summary>
         private const string RequestMethod = BaseConstants.REQUESTMETHOD;
 
+        /// <summary>
+        /// X509Certificate
+        /// </summary>
+        private X509Certificate x509;
+
+        /// <summary>
+        /// Exception log
+        /// </summary>
         private static readonly ILog log = LogManager.GetLogger(typeof(APIService));
 
         private static ArrayList retryCodes = new ArrayList(new HttpStatusCode[] 
@@ -61,6 +71,23 @@ namespace PayPal
                 myWriter.Write(payLoad);
                 log.Debug(payLoad);
             }
+
+            if (apiCallHandler.GetCredential() is CertificateCredential)
+            {
+                CertificateCredential certCredential = (CertificateCredential)apiCallHandler.GetCredential();
+
+                // Load the certificate into an X509Certificate2 object.
+                if (((CertificateCredential)certCredential).PrivateKeyPassword.Trim() == string.Empty)
+                {
+                    x509 = new X509Certificate2(((CertificateCredential)certCredential).CertificateFile);
+                }
+                else
+                {
+                    x509 = new X509Certificate2(((CertificateCredential)certCredential).CertificateFile, ((CertificateCredential)certCredential).PrivateKeyPassword);
+                }
+                httpRequest.ClientCertificates.Add(x509);
+            }
+
             // Fire request. Retry if configured to do so
             int numRetries = (configMgr.GetProperty(BaseConstants.HTTP_CONNECTION_RETRY) != null) ?
                 Convert.ToInt32(configMgr.GetProperty(BaseConstants.HTTP_CONNECTION_RETRY)) : 0;

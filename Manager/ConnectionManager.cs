@@ -10,6 +10,9 @@ namespace PayPal.Manager
     /// </summary>
     public sealed class ConnectionManager
     {
+        /// <summary>
+        /// Exception log
+        /// </summary>
         private static ILog log = LogManager.GetLogger(typeof(ConnectionManager));
         
         /// <summary>

@@ -9,6 +9,9 @@ namespace PayPal.Manager
     /// </summary>
     public sealed class CredentialManager
     {
+        /// <summary>
+        /// Exception log
+        /// </summary>
         private static readonly ILog log = LogManager.GetLogger(typeof(CredentialManager));
 
         /// <summary>

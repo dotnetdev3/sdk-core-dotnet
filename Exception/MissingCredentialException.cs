@@ -4,6 +4,9 @@ namespace PayPal.Exception
 {
     public class MissingCredentialException : System.Exception
     {
+        /// <summary>
+        /// Exception log
+        /// </summary>
 		private static ILog log = LogManager.GetLogger("com.paypal.sdk.exceptions.MissingCredentialException"); 
 
 		/// <summary>
