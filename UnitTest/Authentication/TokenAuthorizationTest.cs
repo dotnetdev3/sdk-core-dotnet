@@ -10,7 +10,7 @@ namespace PayPal.UnitTest.Authentication
         [Test, ExpectedException(typeof(ArgumentException))]
 	    public void ArgumentExceptionTest() 
         {
-            TokenAuthorization tokenAuth = new TokenAuthorization(null, null);
+            TokenAuthorization toknAuthorization = new TokenAuthorization(null, null);
 	    }
     }
 }

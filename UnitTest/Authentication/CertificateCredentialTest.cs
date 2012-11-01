@@ -7,52 +7,52 @@ namespace PayPal.UnitTest.Authentication
     [TestFixture]
     class CertificateCredentialTest
     {
-        CertificateCredential cred;
+        CertificateCredential certCredential;
 
         public CertificateCredentialTest()
         {
-            cred = new CertificateCredential(
+            certCredential = new CertificateCredential(
                     "platfo_1255077030_biz_api1.gmail.com", "1255077037",
                     "sdk-cert.p12", "KJAERUGBLVF6Y");          
         }
 
         [Test]
-        public void UserNameTest()
+        public void UserName()
         {
-            Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com", cred.UserName);
+            Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com", certCredential.UserName);
         }
 
 
         [Test]
-        public void PasswordTest()
+        public void Password()
         {
-            Assert.AreEqual("1255077037", cred.Password);
+            Assert.AreEqual("1255077037", certCredential.Password);
         }
 
         [Test]
-        public void CertificateFileTest()
+        public void CertificateFile()
         {
-            Assert.AreEqual("sdk-cert.p12", cred.CertificateFile);
+            Assert.AreEqual("sdk-cert.p12", certCredential.CertificateFile);
         }
 
         [Test]
-        public void PrivateKeyPasswordTest()
+        public void PrivateKeyPassword()
         {
-            Assert.AreEqual("KJAERUGBLVF6Y", cred.PrivateKeyPassword);
+            Assert.AreEqual("KJAERUGBLVF6Y", certCredential.PrivateKeyPassword);
         }
         
         [Test]
-        public void ApplicationIDTest()
+        public void ApplicationID()
         {
-            cred.ApplicationID ="APP-80W284485P519543T" ;
-            Assert.AreEqual("APP-80W284485P519543T", cred.ApplicationID);
+            certCredential.ApplicationID ="APP-80W284485P519543T" ;
+            Assert.AreEqual("APP-80W284485P519543T", certCredential.ApplicationID);
         }               
 
         [Test]
         public void setAndGetThirdPartyAuthorizationForSubject()
         {
             IThirdPartyAuthorization thirdPartyAuthorization = new SubjectAuthorization("Subject");
-            cred.ThirdPartyAuthorization = thirdPartyAuthorization;
+            certCredential.ThirdPartyAuthorization = thirdPartyAuthorization;
             Assert.AreEqual(((SubjectAuthorization)thirdPartyAuthorization).Subject,"Subject");
 
         }
@@ -61,7 +61,7 @@ namespace PayPal.UnitTest.Authentication
         public void ThirdPartyAuthorizationTestForToken()
         {
             IThirdPartyAuthorization thirdPartyAuthorization = new TokenAuthorization(UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
-            cred.ThirdPartyAuthorization = thirdPartyAuthorization;
+            certCredential.ThirdPartyAuthorization = thirdPartyAuthorization;
             Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).AccessToken,
                     UnitTestConstants.ACCESS_TOKEN);
             Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).TokenSecret,
@@ -69,9 +69,9 @@ namespace PayPal.UnitTest.Authentication
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
-        public void CertificateCredentialArgumentExceptionTest()
+        public void CertificateCredentialArgumentException()
         {
-            cred = new CertificateCredential(null, null, null, null);
+            certCredential = new CertificateCredential(null, null, null, null);
         }
     }
 }

@@ -10,13 +10,16 @@ namespace PayPal.UnitTest.SOAP
     [TestFixture]
     class CertificateSOAPHeaderAuthStrategyTest
     {
+        CertificateCredential certCredential;
+        CertificateSOAPHeaderAuthStrategy certSOAPHeaderAuthStrategy;
+        SubjectAuthorization subAuthorization;
+
         [Test]
         public void GenerateHeaderStrategy()
         {
-            CertificateCredential certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");
-            CertificateSOAPHeaderAuthStrategy certificateSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
-            string payload = certificateSOAPHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
-
+            certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");
+            certSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
+            string payload = certSOAPHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
             XmlDocument xmlDoc = GetXmlDocument(payload);
             XmlNodeList xmlNodeListUsername = xmlDoc.GetElementsByTagName("Username");
             Assert.IsTrue(xmlNodeListUsername.Count > 0);
@@ -29,24 +32,23 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GenerateHeaderStrategyToken()
         {
-            CertificateCredential certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");
-            CertificateSOAPHeaderAuthStrategy certificateSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
-            TokenAuthorization tokenAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
-            certificateSOAPHeaderAuthStrategy.ThirdPartyAuthorization = tokenAuthorization;
-            string payload = certificateSOAPHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
+            certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");
+            certSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
+            TokenAuthorization toknAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
+            certSOAPHeaderAuthStrategy.ThirdPartyAuthorization = toknAuthorization;
+            string payload = certSOAPHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
             Assert.AreEqual("<ns:RequesterCredentials/>", payload);
         }
         
         [Test]
         public void GenerateHeaderStrategyThirdPartyAuthorization()
         {
-            CertificateCredential certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");
-            CertificateSOAPHeaderAuthStrategy certificateSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
-            SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");
-            certificateSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subjectAuthorization;
-            certCredential.ThirdPartyAuthorization = subjectAuthorization;
-            string payload = certificateSOAPHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
-
+            certCredential = new CertificateCredential("testusername", "testpassword", "sdk-cert.p12", "KJAERUGBLVF6Y");
+            certSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
+            subAuthorization = new SubjectAuthorization("testsubject");
+            certSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subAuthorization;
+            certCredential.ThirdPartyAuthorization = subAuthorization;
+            string payload = certSOAPHeaderAuthStrategy.GenerateHeaderStrategy(certCredential);
             XmlDocument xmlDoc = GetXmlDocument(payload);
             XmlNodeList xmlNodeListUsername = xmlDoc.GetElementsByTagName("Username");
             Assert.IsTrue(xmlNodeListUsername.Count > 0);
@@ -62,10 +64,10 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void ThirdPartyAuthorization()
         {
-            CertificateSOAPHeaderAuthStrategy certificateSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
-            SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");
-            certificateSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subjectAuthorization;
-            Assert.IsNotNull(certificateSOAPHeaderAuthStrategy.ThirdPartyAuthorization);
+            certSOAPHeaderAuthStrategy = new CertificateSOAPHeaderAuthStrategy();
+            subAuthorization = new SubjectAuthorization("testsubject");
+            certSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subAuthorization;
+            Assert.IsNotNull(certSOAPHeaderAuthStrategy.ThirdPartyAuthorization);
         }
       
         private XmlDocument GetXmlDocument(string xmlString)

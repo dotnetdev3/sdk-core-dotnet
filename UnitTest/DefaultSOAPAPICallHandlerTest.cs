@@ -8,38 +8,38 @@ namespace PayPal.UnitTest
     [TestFixture]
     class DefaultSOAPAPICallHandlerTest
     {
-        //[Test]
-        //Check App.config for <add name="endpoint" value="https://api-3t.sandbox.paypal.com/2.0"/>
-        [Ignore]
+        DefaultSOAPAPICallHandler defaultSOAPHandler;
+
+        [Ignore] //[Test] To Run this Test Case configure App.config <add name="endpoint" value="https://api-3t.sandbox.paypal.com/2.0"/>
 	    public void EndPoint() 
         {
-            DefaultSOAPAPICallHandler defaultHandler = new DefaultSOAPAPICallHandler(
+            defaultSOAPHandler = new DefaultSOAPAPICallHandler(
                     "requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP",
                     string.Empty, string.Empty);
-		    Assert.AreEqual("https://api-3t.sandbox.paypal.com/2.0", defaultHandler.GetEndPoint());
+		    Assert.AreEqual("https://api-3t.sandbox.paypal.com/2.0", defaultSOAPHandler.GetEndPoint());
         }
     
         [Test]
         public void HeaderElement()
         {
-            DefaultSOAPAPICallHandler defaultHandler = new DefaultSOAPAPICallHandler(string.Empty, string.Empty, string.Empty);
-            defaultHandler.HeaderElement = "HeaderElement";
-            Assert.AreEqual("HeaderElement", defaultHandler.HeaderElement);
+            defaultSOAPHandler = new DefaultSOAPAPICallHandler(string.Empty, string.Empty, string.Empty);
+            defaultSOAPHandler.HeaderElement = "HeaderElement";
+            Assert.AreEqual("HeaderElement", defaultSOAPHandler.HeaderElement);
         }
 
         [Test]
         public void NamespaceAttributes()
         {
-            DefaultSOAPAPICallHandler defaultHandler = new DefaultSOAPAPICallHandler(string.Empty, string.Empty, string.Empty);
-            defaultHandler.NamespaceAttributes = "NamespaceAttributes";
-            Assert.AreEqual("NamespaceAttributes", defaultHandler.NamespaceAttributes);
+            defaultSOAPHandler = new DefaultSOAPAPICallHandler(string.Empty, string.Empty, string.Empty);
+            defaultSOAPHandler.NamespaceAttributes = "NamespaceAttributes";
+            Assert.AreEqual("NamespaceAttributes", defaultSOAPHandler.NamespaceAttributes);
         }
 
         [Test]
         public void GetPayloadForEmptyRawPayload()
         {
-            DefaultSOAPAPICallHandler defaultHandler = new DefaultSOAPAPICallHandler(string.Empty, string.Empty, string.Empty);
-            Assert.AreEqual("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" ><soapenv:Header></soapenv:Header><soapenv:Body></soapenv:Body></soapenv:Envelope>", defaultHandler.GetPayLoad());
+            defaultSOAPHandler = new DefaultSOAPAPICallHandler(string.Empty, string.Empty, string.Empty);
+            Assert.AreEqual("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" ><soapenv:Header></soapenv:Header><soapenv:Body></soapenv:Body></soapenv:Envelope>", defaultSOAPHandler.GetPayLoad());
         }
     }
 }

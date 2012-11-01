@@ -10,23 +10,25 @@ namespace PayPal.UnitTest.Manager
     [TestFixture]
     public class ConnectionManagerTest
     {
+        ConnectionManager connectionMgr;
+        HttpWebRequest httpRequest;
+
         [Test]
         public void CreateNewConnection()
         {
-            ConnectionManager connMgr = ConnectionManager.Instance;
+            connectionMgr = ConnectionManager.Instance;
             ConfigManager configMgr = ConfigManager.Instance;
-
-            HttpWebRequest httpRequest = connMgr.GetConnection("http://paypal.com/");
+            httpRequest = connectionMgr.GetConnection("http://paypal.com/");
             Assert.IsNotNull(httpRequest);
             Assert.AreEqual("http://paypal.com/", httpRequest.RequestUri.AbsoluteUri);
-            Assert.AreEqual(configMgr.GetProperty("connectionTimeout"), httpRequest.Timeout.ToString());            
+            Assert.AreEqual(configMgr.GetProperty("connectionTimeout"), httpRequest.Timeout.ToString());
         }
 
-        [Test, ExpectedException( typeof(ConfigException) )]
+        [Test, ExpectedException(typeof(ConfigException))]
         public void CreateNewConnectionWithInvalidURL()
         {
-            ConnectionManager connMgr = ConnectionManager.Instance;
-            HttpWebRequest httpRequest = connMgr.GetConnection("Not a url");
+            connectionMgr = ConnectionManager.Instance;
+            httpRequest = connectionMgr.GetConnection("Not a url");
         }
     }
 }

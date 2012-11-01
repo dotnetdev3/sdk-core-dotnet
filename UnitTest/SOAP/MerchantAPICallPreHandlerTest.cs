@@ -13,6 +13,8 @@ namespace PayPal.UnitTest.SOAP
     {
         private DefaultSOAPAPICallHandler defaultSoaphandler;
         private CredentialManager credentialmgr;
+        ICredential credential;
+        MerchantAPICallPreHandler soapHandler;
 
         public MerchantAPICallPreHandlerTest()
         {
@@ -24,8 +26,8 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GetHeaderMapSignature()
         {
-            ICredential signatureCredential = credentialmgr.GetCredentials("jb-us-seller_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, signatureCredential);
+            credential = credentialmgr.GetCredentials("jb-us-seller_api1.paypal.com");
+            soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             Dictionary<String, String> headers = soapHandler.GetHeaderMap();
             Assert.IsNotNull(headers);
             Assert.IsTrue(headers.Count > 0);
@@ -39,8 +41,8 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GetHeaderMapCertificate()
         {
-            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
+            credential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
+            soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             Dictionary<String, String> headers = soapHandler.GetHeaderMap();
             Assert.IsNotNull(headers);
             Assert.IsTrue(headers.Count > 0);
@@ -54,10 +56,9 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GetPayLoadSignature()
         {
-            ICredential signatureCredential = credentialmgr.GetCredentials("jb-us-seller_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, signatureCredential);
+            credential = credentialmgr.GetCredentials("jb-us-seller_api1.paypal.com");
+            soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             string payload = soapHandler.GetPayLoad();
-
             XmlDocument xmlDoc = GetXmlDocument(payload);
             XmlNodeList xmlNodeListUsername = xmlDoc.GetElementsByTagName("Username");
             Assert.IsTrue(xmlNodeListUsername.Count > 0);
@@ -76,10 +77,9 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GetPayLoadForCertificate()
         {
-            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
+            credential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
+            soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             string payload = soapHandler.GetPayLoad();
-
             XmlDocument xmlDoc = GetXmlDocument(payload);
             XmlNodeList xmlNodeListUsername = xmlDoc.GetElementsByTagName("Username");
             Assert.IsTrue(xmlNodeListUsername.Count > 0);
@@ -95,8 +95,8 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void SDKName()
         {
-            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
+            credential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
+            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             soapHandler.SDKName = "testsdk";
             Assert.AreEqual("testsdk", soapHandler.SDKName);
         }
@@ -104,8 +104,8 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void SDKVersion()
         {
-            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
+            credential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
+            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             soapHandler.SDKVersion = "1.0.0";
             Assert.AreEqual("1.0.0", soapHandler.SDKVersion);
         }
@@ -113,8 +113,8 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GetEndPoint()
         {
-            ICredential certificateCredential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
-            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, certificateCredential);
+            credential = credentialmgr.GetCredentials("certuser_biz_api1.paypal.com");
+            MerchantAPICallPreHandler soapHandler = new MerchantAPICallPreHandler(defaultSoaphandler, credential);
             string endpoint = soapHandler.GetEndPoint();
             Assert.AreEqual(UnitTestConstants.API_ENDPOINT, endpoint);
         }      

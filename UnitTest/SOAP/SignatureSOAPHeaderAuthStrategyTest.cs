@@ -10,22 +10,23 @@ namespace PayPal.UnitTest.SOAP
     [TestFixture]
     class SignatureSOAPHeaderAuthStrategyTest
     {
+        SignatureCredential signCredential;
+        SignatureSOAPHeaderAuthStrategy signSOAPHeaderAuthStrategy;
+        SubjectAuthorization subAuthorization;
+
         [Test]
         public void GenerateHeaderStrategy()
         {
-            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
-            SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-            string payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
-
+            signCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
+            signSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
+            string payload = signSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);
             XmlDocument xmlDoc = GetXmlDocument(payload);
             XmlNodeList xmlNodeListUsername = xmlDoc.GetElementsByTagName("Username");
             Assert.IsTrue(xmlNodeListUsername.Count > 0);
             Assert.AreEqual("testusername", xmlNodeListUsername[0].InnerXml);
-
             XmlNodeList xmlNodeListPassword = xmlDoc.GetElementsByTagName("Password");
             Assert.IsTrue(xmlNodeListPassword.Count > 0);
             Assert.AreEqual("testpassword", xmlNodeListPassword[0].InnerXml);
-
             XmlNodeList xmlNodeListSignature = xmlDoc.GetElementsByTagName("Signature");
             Assert.IsTrue(xmlNodeListSignature.Count > 0);
             Assert.AreEqual("testsignature", xmlNodeListSignature[0].InnerXml);
@@ -34,38 +35,34 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GenerateHeaderStrategyToken()
         {
-            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
-            SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-            TokenAuthorization tokenAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
-            signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization = tokenAuthorization;
-            signatureCredential.ThirdPartyAuthorization =tokenAuthorization;
-            string payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
+            signCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
+            signSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
+            TokenAuthorization toknAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
+            signSOAPHeaderAuthStrategy.ThirdPartyAuthorization = toknAuthorization;
+            signCredential.ThirdPartyAuthorization =toknAuthorization;
+            string payload = signSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);
             Assert.AreEqual("<ns:RequesterCredentials/>", payload);
         }               
 
         [Test]
         public void GenerateHeaderStrategyThirdParty()
         {
-            SignatureCredential signatureCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
-            SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-            SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");
-            signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subjectAuthorization;
-            signatureCredential.ThirdPartyAuthorization = subjectAuthorization;
-            string payload = signatureSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signatureCredential);
-            
+            signCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
+            signSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
+            subAuthorization = new SubjectAuthorization("testsubject");
+            signSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subAuthorization;
+            signCredential.ThirdPartyAuthorization = subAuthorization;
+            string payload = signSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);            
             XmlDocument xmlDoc = GetXmlDocument(payload);
             XmlNodeList NodeListUsername = xmlDoc.GetElementsByTagName("Username");            
             Assert.IsTrue(NodeListUsername.Count > 0);
             Assert.AreEqual("testusername", NodeListUsername[0].InnerXml);
-
             XmlNodeList xmlNodeListPassword = xmlDoc.GetElementsByTagName("Password");
             Assert.IsTrue(xmlNodeListPassword.Count > 0);
             Assert.AreEqual("testpassword", xmlNodeListPassword[0].InnerXml);
-
             XmlNodeList xmlNodeListSignature = xmlDoc.GetElementsByTagName("Signature");
             Assert.IsTrue(xmlNodeListSignature.Count > 0);
             Assert.AreEqual("testsignature", xmlNodeListSignature[0].InnerXml);
-
             XmlNodeList xmlNodeListSubject = xmlDoc.GetElementsByTagName("Subject");
             Assert.IsTrue(xmlNodeListSubject.Count > 0);
             Assert.AreEqual("testsubject", xmlNodeListSubject[0].InnerXml);
@@ -74,11 +71,11 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void ThirdPartyAuthorization()
         {
-            SignatureSOAPHeaderAuthStrategy signatureSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
-            SubjectAuthorization subjectAuthorization = new SubjectAuthorization("testsubject");
-            signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subjectAuthorization;
-            Assert.IsNotNull(signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization);
-            Assert.AreEqual("testsubject", ((PayPal.Authentication.SubjectAuthorization)(signatureSOAPHeaderAuthStrategy.ThirdPartyAuthorization)).Subject);
+            signSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
+            subAuthorization = new SubjectAuthorization("testsubject");
+            signSOAPHeaderAuthStrategy.ThirdPartyAuthorization = subAuthorization;
+            Assert.IsNotNull(signSOAPHeaderAuthStrategy.ThirdPartyAuthorization);
+            Assert.AreEqual("testsubject", ((PayPal.Authentication.SubjectAuthorization)(signSOAPHeaderAuthStrategy.ThirdPartyAuthorization)).Subject);
         }
         
         private XmlDocument GetXmlDocument(string xmlString)

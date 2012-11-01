@@ -10,7 +10,7 @@ namespace PayPal.UnitTest.Authentication
         [Test, ExpectedException(typeof(ArgumentException))]
         public void ArgumentExceptionTest()
         {
-            SubjectAuthorization subjectAuth = new SubjectAuthorization(null);
+            SubjectAuthorization subAuthorization = new SubjectAuthorization(null);
         }
     }
 }
