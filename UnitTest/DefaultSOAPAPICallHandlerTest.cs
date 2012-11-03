@@ -13,10 +13,8 @@ namespace PayPal.UnitTest
         [Ignore] //[Test] To Run this Test Case configure App.config <add name="endpoint" value="https://api-3t.sandbox.paypal.com/2.0"/>
 	    public void EndPoint() 
         {
-            defaultSOAPHandler = new DefaultSOAPAPICallHandler(
-                    "requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP",
-                    string.Empty, string.Empty);
-		    Assert.AreEqual("https://api-3t.sandbox.paypal.com/2.0", defaultSOAPHandler.GetEndPoint());
+            defaultSOAPHandler = new DefaultSOAPAPICallHandler(UnitTestConstants.PayloadNVP, string.Empty, string.Empty);
+		    Assert.AreEqual(UnitTestConstants.APIEndpointSOAP, defaultSOAPHandler.GetEndPoint());
         }
     
         [Test]

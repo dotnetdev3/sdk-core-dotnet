@@ -18,19 +18,19 @@ namespace PayPal.UnitTest.Manager
             configMgr = ConfigManager.Instance;
             Account acc = configMgr.GetAccount(0);
             Assert.IsNotNull(acc);
-            Assert.AreEqual("jb-us-seller_api1.paypal.com", acc.APIUsername);
+            Assert.AreEqual(UnitTestConstants.APIUserName, acc.APIUsername);
         }
 
         [Test]
         public void RetrieveAccountConfigByUsername()
         {
             configMgr = ConfigManager.Instance;
-            Account acc = configMgr.GetAccount("jb-us-seller_api1.paypal.com");
+            Account acc = configMgr.GetAccount(UnitTestConstants.APIUserName);
             Assert.IsNotNull(acc);
-            Assert.AreEqual("jb-us-seller_api1.paypal.com", acc.APIUsername);
-            Assert.AreEqual("WX4WTU3S8MY44S7F", acc.APIPassword);
-            Assert.AreEqual("AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy", acc.APISignature);
-            Assert.AreEqual("APP-80W284485P519543T", acc.ApplicationId);
+            Assert.AreEqual(UnitTestConstants.APIUserName, acc.APIUsername);
+            Assert.AreEqual(UnitTestConstants.APIPassword, acc.APIPassword);
+            Assert.AreEqual(UnitTestConstants.APISignature, acc.APISignature);
+            Assert.AreEqual(UnitTestConstants.ApplicationID, acc.ApplicationId);
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace PayPal.UnitTest.Manager
             configMgr = ConfigManager.Instance;
             string endpoint = configMgr.GetProperty("endpoint");
             Assert.IsNotNull(endpoint);
-            Assert.AreEqual("https://svcs.sandbox.paypal.com/", endpoint);
+            Assert.AreEqual(UnitTestConstants.APIEndpointNVP, endpoint);
             string connectionTimeout = configMgr.GetProperty("connectionTimeout");
             Assert.IsNotNull(connectionTimeout);
             Assert.AreEqual("360000", connectionTimeout);

@@ -19,10 +19,7 @@ namespace PayPal.UnitTest
         [Test]
         public void MakeRequestUsingNVPCertificateCredential()
         {
-            string payload = @"requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
-            handler = new PlatformAPICallPreHandler(payload,
-                    "AdaptivePayments", "ConvertCurrency",
-                    "certuser_biz_api1.paypal.com", null, null);
+            handler = new PlatformAPICallPreHandler(UnitTestConstants.PayloadNVP, "AdaptivePayments", "ConvertCurrency", UnitTestConstants.CertificateAPIUserName, null, null);
             Thread.Sleep(5000);
             APIService service = new APIService();
             string response = service.MakeRequestUsing(handler);
@@ -33,10 +30,7 @@ namespace PayPal.UnitTest
         [Test]
         public void MakeRequestUsingNVPSignatureCredential()
         {
-            string payload = @"requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
-            handler = new PlatformAPICallPreHandler(payload,
-                    "AdaptivePayments", "ConvertCurrency",
-                    UnitTestConstants.API_USER_NAME, null, null);
+            handler = new PlatformAPICallPreHandler(UnitTestConstants.PayloadNVP, "AdaptivePayments", "ConvertCurrency", UnitTestConstants.APIUserName, null, null);
             Thread.Sleep(5000);
             service = new APIService();
             string response = service.MakeRequestUsing(handler);           
@@ -47,9 +41,8 @@ namespace PayPal.UnitTest
         [Ignore] //[Test] To Run this Test Case configure App.config <add name="endpoint" value="https://api-3t.sandbox.paypal.com/2.0"/>
         public void MakeRequestUsingSOAPSignatureCredential()
         {
-            string payload = @"<ns:GetBalanceReq><ns:GetBalanceRequest><ebl:Version>94.0</ebl:Version></ns:GetBalanceRequest></ns:GetBalanceReq>";
-            defaultSOAPHandler = new DefaultSOAPAPICallHandler(payload, null, null);
-            handler = new MerchantAPICallPreHandler(defaultSOAPHandler, UnitTestConstants.API_USER_NAME, null, null);
+            defaultSOAPHandler = new DefaultSOAPAPICallHandler(UnitTestConstants.PayloadSOAP, null, null);
+            handler = new MerchantAPICallPreHandler(defaultSOAPHandler, UnitTestConstants.APIUserName, null, null);
             service = new APIService();
             string response = service.MakeRequestUsing(handler);
             Assert.IsNotNull(response);

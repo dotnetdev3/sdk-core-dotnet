@@ -39,7 +39,7 @@ namespace PayPal.UnitTest.SOAP
             signSOAPHeaderAuthStrategy = new SignatureSOAPHeaderAuthStrategy();
             TokenAuthorization toknAuthorization = new TokenAuthorization("accessToken", "tokenSecret");
             signSOAPHeaderAuthStrategy.ThirdPartyAuthorization = toknAuthorization;
-            signCredential.ThirdPartyAuthorization =toknAuthorization;
+            signCredential.ThirdPartyAuthorization = toknAuthorization;
             string payload = signSOAPHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);
             Assert.AreEqual("<ns:RequesterCredentials/>", payload);
         }               

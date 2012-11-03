@@ -11,9 +11,7 @@ namespace PayPal.UnitTest.Authentication
 
         public CertificateCredentialTest()
         {
-            certCredential = new CertificateCredential(
-                    "platfo_1255077030_biz_api1.gmail.com", "1255077037",
-                    "sdk-cert.p12", "KJAERUGBLVF6Y");          
+            certCredential = new CertificateCredential("platfo_1255077030_biz_api1.gmail.com", "1255077037", "sdk-cert.p12", "KJAERUGBLVF6Y");          
         }
 
         [Test]
@@ -21,8 +19,7 @@ namespace PayPal.UnitTest.Authentication
         {
             Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com", certCredential.UserName);
         }
-
-
+        
         [Test]
         public void Password()
         {
@@ -44,8 +41,8 @@ namespace PayPal.UnitTest.Authentication
         [Test]
         public void ApplicationID()
         {
-            certCredential.ApplicationID ="APP-80W284485P519543T" ;
-            Assert.AreEqual("APP-80W284485P519543T", certCredential.ApplicationID);
+            certCredential.ApplicationID = UnitTestConstants.ApplicationID ;
+            Assert.AreEqual(UnitTestConstants.ApplicationID, certCredential.ApplicationID);
         }               
 
         [Test]
@@ -60,12 +57,10 @@ namespace PayPal.UnitTest.Authentication
         [Test]
         public void ThirdPartyAuthorizationTestForToken()
         {
-            IThirdPartyAuthorization thirdPartyAuthorization = new TokenAuthorization(UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
+            IThirdPartyAuthorization thirdPartyAuthorization = new TokenAuthorization(UnitTestConstants.AccessToken, UnitTestConstants.TokenSecret);
             certCredential.ThirdPartyAuthorization = thirdPartyAuthorization;
-            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).AccessToken,
-                    UnitTestConstants.ACCESS_TOKEN);
-            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).TokenSecret,
-                    UnitTestConstants.TOKEN_SECRET);
+            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).AccessToken, UnitTestConstants.AccessToken);
+            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).TokenSecret, UnitTestConstants.TokenSecret);
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]

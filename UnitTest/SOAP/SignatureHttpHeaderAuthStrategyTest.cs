@@ -15,26 +15,26 @@ namespace PayPal.UnitTest.SOAP
         [Test]
         public void GenerateHeaderStrategyWithToken()
         {
-            signHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy("https://api-3t.sandbox.paypal.com/2.0");
-            TokenAuthorization toknAuthorization = new TokenAuthorization(UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
+            signHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy(UnitTestConstants.APIEndpointSOAP);
+            TokenAuthorization toknAuthorization = new TokenAuthorization(UnitTestConstants.AccessToken, UnitTestConstants.TokenSecret);
             signCredential = new SignatureCredential("testusername", "testpassword", "testsignature", toknAuthorization);
             Dictionary<string, string> header = signHttpHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);
-            string authHeader = header["X-PP-AUTHORIZATION"];
+            string authHeader = header[BaseConstants.PAYPAL_AUTHORIZATION_MERCHANT];
             string[] headers = authHeader.Split(',');
-            Assert.AreEqual("token=" + UnitTestConstants.ACCESS_TOKEN, headers[0]);
+            Assert.AreEqual("token=" + UnitTestConstants.AccessToken, headers[0]);
         }
 
         [Test]
         public void GenerateHeaderStrategyWithoutToken()
         {
-            signHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy("https://api-3t.sandbox.paypal.com/2.0");
+            signHttpHeaderAuthStrategy = new SignatureHttpHeaderAuthStrategy(UnitTestConstants.APIEndpointSOAP);
             signCredential = new SignatureCredential("testusername", "testpassword", "testsignature");
             Dictionary<string, string> header = signHttpHeaderAuthStrategy.GenerateHeaderStrategy(signCredential);            
-            string username = header["X-PAYPAL-SECURITY-USERID"];
-            string psw = header["X-PAYPAL-SECURITY-PASSWORD"];
-            string sign = header["X-PAYPAL-SECURITY-SIGNATURE"];
+            string username = header[BaseConstants.PAYPAL_SECURITY_USERID_HEADER];
+            string password = header[BaseConstants.PAYPAL_SECURITY_PASSWORD_HEADER];
+            string sign = header[BaseConstants.PAYPAL_SECURITY_SIGNATURE_HEADER];
             Assert.AreEqual("testusername", username);
-            Assert.AreEqual("testpassword", psw);
+            Assert.AreEqual("testpassword", password);
             Assert.AreEqual("testsignature", sign);
         }
     }

@@ -15,32 +15,32 @@ namespace PayPal.UnitTest.Manager
         [Test]
         public void LoadSignatureCredential()
         {
-            string apiUsername = "jb-us-seller_api1.paypal.com";
+            string apiUsername = UnitTestConstants.APIUserName;
             credentialMgr = CredentialManager.Instance;
             credential = credentialMgr.GetCredentials(apiUsername);
             Assert.NotNull(credential);
             Assert.IsInstanceOf(typeof(SignatureCredential), credential);
-            SignatureCredential sig = (SignatureCredential) credential;
-            Assert.AreEqual(apiUsername, sig.UserName);
-            Assert.AreEqual("WX4WTU3S8MY44S7F", sig.Password);
-            Assert.AreEqual("AFcWxV21C7fd0v3bYYYRCpSSRl31A7yDhhsPUU2XhtMoZXsWHFxu-RWy", sig.Signature);
-            Assert.AreEqual("APP-80W284485P519543T", sig.ApplicationID);            
+            SignatureCredential signCredential = (SignatureCredential) credential;
+            Assert.AreEqual(apiUsername, signCredential.UserName);
+            Assert.AreEqual(UnitTestConstants.APIPassword, signCredential.Password);
+            Assert.AreEqual(UnitTestConstants.APISignature, signCredential.Signature);
+            Assert.AreEqual(UnitTestConstants.ApplicationID, signCredential.ApplicationID);            
         }
 
         [Test]
         public void LoadCertificateCredential()
         {
-            string apiUsername = "certuser_biz_api1.paypal.com";
+            string apiUsername = UnitTestConstants.CertificateAPIUserName;
             credentialMgr = CredentialManager.Instance;
             credential = credentialMgr.GetCredentials(apiUsername);
             Assert.NotNull(credential);
             Assert.IsInstanceOf(typeof(CertificateCredential), credential);
-            CertificateCredential cert = (CertificateCredential)credential;
-            Assert.AreEqual(apiUsername, cert.UserName);
-            Assert.AreEqual("D6JNKKULHN3G5B8A", cert.Password);
-            Assert.AreEqual(UnitTestConstants.CERT_PATH, cert.CertificateFile);
-            Assert.AreEqual(UnitTestConstants.CERT_PASSWORD, cert.PrivateKeyPassword);
-            Assert.AreEqual("APP-80W284485P519543T", cert.ApplicationID);
+            CertificateCredential certCredential = (CertificateCredential)credential;
+            Assert.AreEqual(apiUsername, certCredential.UserName);
+            Assert.AreEqual(UnitTestConstants.CertificateAPIPassword, certCredential.Password);
+            Assert.AreEqual(UnitTestConstants.CertificatePath, certCredential.CertificateFile);
+            Assert.AreEqual(UnitTestConstants.CertificatePassword, certCredential.PrivateKeyPassword);
+            Assert.AreEqual(UnitTestConstants.ApplicationID, certCredential.ApplicationID);
         }
 
         [Test, ExpectedException( typeof(MissingCredentialException) )]

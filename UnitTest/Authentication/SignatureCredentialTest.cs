@@ -12,16 +12,13 @@ namespace PayPal.UnitTest.Authentication
 
         public SignatureCredentialTest()
         {
-            signCredential = new SignatureCredential("platfo_1255077030_biz_api1.gmail.com",
-                    "1255077037",
-                    "Abg0gYcQyxQvnf2HDJkKtA-p6pqhA1k-KTYE0Gcy1diujFio4io5Vqjf");
+            signCredential = new SignatureCredential("platfo_1255077030_biz_api1.gmail.com", "1255077037", "Abg0gYcQyxQvnf2HDJkKtA-p6pqhA1k-KTYE0Gcy1diujFio4io5Vqjf");
         }
 
         [Test]
         public void Signature()
         {
-            Assert.AreEqual("Abg0gYcQyxQvnf2HDJkKtA-p6pqhA1k-KTYE0Gcy1diujFio4io5Vqjf",
-                    ((SignatureCredential)signCredential).Signature);
+            Assert.AreEqual("Abg0gYcQyxQvnf2HDJkKtA-p6pqhA1k-KTYE0Gcy1diujFio4io5Vqjf", ((SignatureCredential)signCredential).Signature);
         }
 
         [Test]
@@ -33,15 +30,14 @@ namespace PayPal.UnitTest.Authentication
         [Test]
         public void UserName()
         {
-            Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com",
-                    signCredential.UserName);
+            Assert.AreEqual("platfo_1255077030_biz_api1.gmail.com", signCredential.UserName);
         }
 
         [Test]
         public void ApplicationID()
         {
-            signCredential.ApplicationID = "APP-80W284485P519543T";
-            Assert.AreEqual("APP-80W284485P519543T", signCredential.ApplicationID);
+            signCredential.ApplicationID = UnitTestConstants.ApplicationID;
+            Assert.AreEqual(UnitTestConstants.ApplicationID, signCredential.ApplicationID);
         }
 
         [Test]
@@ -55,10 +51,10 @@ namespace PayPal.UnitTest.Authentication
         [Test]
         public void ThirdPartyAuthorizationForToken()
         {
-            IThirdPartyAuthorization thirdPartyAuthorization = new TokenAuthorization(UnitTestConstants.ACCESS_TOKEN, UnitTestConstants.TOKEN_SECRET);
+            IThirdPartyAuthorization thirdPartyAuthorization = new TokenAuthorization(UnitTestConstants.AccessToken, UnitTestConstants.TokenSecret);
             signCredential.ThirdPartyAuthorization = thirdPartyAuthorization;            
-            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).AccessToken, UnitTestConstants.ACCESS_TOKEN);
-            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).TokenSecret, UnitTestConstants.TOKEN_SECRET);
+            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).AccessToken, UnitTestConstants.AccessToken);
+            Assert.AreEqual(((TokenAuthorization)thirdPartyAuthorization).TokenSecret, UnitTestConstants.TokenSecret);
 
         }
 
