@@ -40,7 +40,7 @@ namespace PayPal.Authentication
 		    this.QueryParams = new ArrayList();
 		    this.ConsumerKey = consumerKey;
             this.ConsumerSecret = System.Text.Encoding.ASCII.GetBytes(consumerSecret);
-		    this.HttpMethod = HTTPMethod.POST;            		   
+		    this.MethodHTTP = HTTPMethod.POST;            		   
 	    }
 
 	    /**
@@ -105,7 +105,7 @@ namespace PayPal.Authentication
         //TODO: Remove me
         public void setHTTPMethod(HTTPMethod method)
         {
-            this.HttpMethod = method;
+            this.MethodHTTP = method;
         }
 
 	    /**
@@ -119,19 +119,19 @@ namespace PayPal.Authentication
             switch (method)
             {
                 case "GET":
-                    this.HttpMethod = HTTPMethod.GET;
+                    this.MethodHTTP = HTTPMethod.GET;
                     break;
                 case "POST":
-                    this.HttpMethod = HTTPMethod.POST;
+                    this.MethodHTTP = HTTPMethod.POST;
                     break;
                 case "PUT":
-                    this.HttpMethod = HTTPMethod.PUT;
+                    this.MethodHTTP = HTTPMethod.PUT;
                     break;
                 case "UPDATE":
-                    this.HttpMethod = HTTPMethod.UPDATE;
+                    this.MethodHTTP = HTTPMethod.UPDATE;
                     break;
                 default:
-                    this.HttpMethod = HTTPMethod.POST;
+                    this.MethodHTTP = HTTPMethod.POST;
                     break;
             }
 	    }
@@ -184,7 +184,7 @@ namespace PayPal.Authentication
                     if (counter < numParams)
                         paramString.Append(PARAM_DELIMETER);				   
 			    }
-                string signatureBase = this.HttpMethod + PARAM_DELIMETER;
+                string signatureBase = this.MethodHTTP + PARAM_DELIMETER;
                 signatureBase += PayPalURLEncoder.Encode(RequestURI, ENCODING_METHOD) + PARAM_DELIMETER;
                 signatureBase += PayPalURLEncoder.Encode(paramString.ToString(), ENCODING_METHOD);
                 Encoding encoding = System.Text.Encoding.ASCII;
@@ -306,7 +306,7 @@ namespace PayPal.Authentication
 	    private byte[] TokenSecret;
 	    private string RequestURI;
 	    private string TokenTimestamp;
-	    private HTTPMethod HttpMethod;
+	    private HTTPMethod MethodHTTP;
 	    private ArrayList QueryParams;
 
 	      

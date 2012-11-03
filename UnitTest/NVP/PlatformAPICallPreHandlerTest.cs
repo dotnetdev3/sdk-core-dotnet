@@ -11,7 +11,7 @@ namespace PayPal.UnitTest.NVP
     class PlatformAPICallPreHandlerTest
     {
         PlatformAPICallPreHandler platformAPIHandler;
-        CredentialManager credentialMgr;
+        CredentialManager credentialMngr;
         ICredential credential;
 
         [Test]
@@ -27,8 +27,8 @@ namespace PayPal.UnitTest.NVP
         [Test]
         public void GetHeaderMapSignatureWithoutTokenTest()
         {
-            credentialMgr = CredentialManager.Instance;
-            credential = credentialMgr.GetCredentials(UnitTestConstants.APIUserName);
+            credentialMngr = CredentialManager.Instance;
+            credential = credentialMngr.GetCredentials(UnitTestConstants.APIUserName);
             platformAPIHandler = new PlatformAPICallPreHandler("payload", "servicename", "method", credential);            
             Dictionary<string, string> header = platformAPIHandler.GetHeaderMap();
             Assert.AreEqual(UnitTestConstants.APIUserName, header[BaseConstants.PAYPAL_SECURITY_USERID_HEADER]);
@@ -52,8 +52,8 @@ namespace PayPal.UnitTest.NVP
         [Test]
         public void GetHeaderMapCertificateWithoutTokenTest()
         {
-            credentialMgr = CredentialManager.Instance;
-            credential = credentialMgr.GetCredentials(UnitTestConstants.CertificateAPIUserName);
+            credentialMngr = CredentialManager.Instance;
+            credential = credentialMngr.GetCredentials(UnitTestConstants.CertificateAPIUserName);
             platformAPIHandler = new PlatformAPICallPreHandler("payload", "servicename", "method", credential);
             Dictionary<string, string> header = platformAPIHandler.GetHeaderMap();
             Assert.AreEqual(UnitTestConstants.CertificateAPIUserName, header[BaseConstants.PAYPAL_SECURITY_USERID_HEADER]);

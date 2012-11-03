@@ -49,7 +49,7 @@ namespace PayPal.Manager
         /// <returns></returns>
         public HttpWebRequest GetConnection(string url)
         {
-            ConfigManager configMgr = ConfigManager.Instance;
+            ConfigManager configMngr = ConfigManager.Instance;
             HttpWebRequest httpRequest = null;
                         
             try
@@ -64,7 +64,7 @@ namespace PayPal.Manager
 
             // Set connection timeout
             int ConnectionTimeout = 0;
-            bool Success = int.TryParse(configMgr.GetProperty(BaseConstants.HTTP_CONNECTION_TIMEOUT), out ConnectionTimeout);
+            bool Success = int.TryParse(configMngr.GetProperty(BaseConstants.HTTP_CONNECTION_TIMEOUT), out ConnectionTimeout);
             if (!Success)
             {
                 ConnectionTimeout = BaseConstants.DEFAULT_TIMEOUT;
@@ -73,12 +73,12 @@ namespace PayPal.Manager
             httpRequest.Timeout = ConnectionTimeout;
 
             // Set request proxy for tunnelling http requests via a proxy server
-            string proxyAddress = configMgr.GetProperty(BaseConstants.HTTP_PROXY_ADDRESS);
+            string proxyAddress = configMngr.GetProperty(BaseConstants.HTTP_PROXY_ADDRESS);
             if (proxyAddress != null)
             {
                 WebProxy requestProxy = new WebProxy();
                 requestProxy.Address = new Uri(proxyAddress);
-                string proxyCredentials = configMgr.GetProperty(BaseConstants.HTTP_PROXY_CREDENTIAL);
+                string proxyCredentials = configMngr.GetProperty(BaseConstants.HTTP_PROXY_CREDENTIAL);
                 if (proxyCredentials != null)
                 {
                     string[] proxyDetails = proxyCredentials.Split(':');

@@ -49,10 +49,10 @@ namespace PayPal
             string uri = apiCallHandler.GetEndPoint();
             Dictionary<string, string> headers = apiCallHandler.GetHeaderMap();
             string payLoad = apiCallHandler.GetPayLoad();
-            ConfigManager configMgr = ConfigManager.Instance;
+            ConfigManager configMngr = ConfigManager.Instance;
             // Constructing HttpWebRequest object                
-            ConnectionManager connMgr = ConnectionManager.Instance;
-            HttpWebRequest httpRequest = connMgr.GetConnection(uri);
+            ConnectionManager connMngr = ConnectionManager.Instance;
+            HttpWebRequest httpRequest = connMngr.GetConnection(uri);
             httpRequest.Method = RequestMethod;
             foreach (KeyValuePair<string, string> header in headers)
             {
@@ -89,8 +89,8 @@ namespace PayPal
             }
 
             // Fire request. Retry if configured to do so
-            int numRetries = (configMgr.GetProperty(BaseConstants.HTTP_CONNECTION_RETRY) != null) ?
-                Convert.ToInt32(configMgr.GetProperty(BaseConstants.HTTP_CONNECTION_RETRY)) : 0;
+            int numRetries = (configMngr.GetProperty(BaseConstants.HTTP_CONNECTION_RETRY) != null) ?
+                Convert.ToInt32(configMngr.GetProperty(BaseConstants.HTTP_CONNECTION_RETRY)) : 0;
             int retries = 0;
 
             do

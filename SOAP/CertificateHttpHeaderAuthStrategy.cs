@@ -23,7 +23,7 @@ namespace PayPal.SOAP
         /// Processing for TokenAuthorization} using SignatureCredential
         /// </summary>
         /// <param name="certCredential"></param>
-        /// <param name="tokenAuth"></param>
+        /// <param name="toknAuthorization"></param>
         /// <returns></returns>
         protected override Dictionary<string, string> ProcessTokenAuthorization(
                 CertificateCredential certCredential, TokenAuthorization toknAuthorization)

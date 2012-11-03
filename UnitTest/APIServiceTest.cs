@@ -37,8 +37,9 @@ namespace PayPal.UnitTest
             Assert.IsNotNull(response);            
             Assert.IsTrue(response.Contains("responseEnvelope.ack=Success"));
         }
-        
-        [Ignore] //[Test] To Run this Test Case configure App.config <add name="endpoint" value="https://api-3t.sandbox.paypal.com/2.0"/>
+
+        //[Test] //To Run this Test Case configure App.config <add name="endpoint" value="https://api-3t.sandbox.paypal.com/2.0"/>
+        [Ignore] 
         public void MakeRequestUsingSOAPSignatureCredential()
         {
             defaultSOAPHandler = new DefaultSOAPAPICallHandler(UnitTestConstants.PayloadSOAP, null, null);

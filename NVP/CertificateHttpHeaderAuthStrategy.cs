@@ -22,28 +22,28 @@ namespace PayPal.NVP
         /// <summary>
         /// Processing for TokenAuthorization using SignatureCredential
         /// </summary>
-        /// <param name="sigCred"></param>
-        /// <param name="tokenAuth"></param>
+        /// <param name="certCredential"></param>
+        /// <param name="toknAuthorization"></param>
         /// <returns></returns>
         protected override Dictionary<string, string> ProcessTokenAuthorization(
-                CertificateCredential certCredential, TokenAuthorization tokenAuth)
+                CertificateCredential certCredential, TokenAuthorization toknAuthorization)
         {
             Dictionary<string, string> headers = new Dictionary<string, string>();
             try
             {
                 OAuthGenerator signGenerator = new OAuthGenerator(certCredential.UserName, certCredential.Password);
                 signGenerator.setHTTPMethod(OAuthGenerator.HTTPMethod.POST);
-                signGenerator.setToken(tokenAuth.AccessToken);
-                signGenerator.setTokenSecret(tokenAuth.TokenSecret);
+                signGenerator.setToken(toknAuthorization.AccessToken);
+                signGenerator.setTokenSecret(toknAuthorization.TokenSecret);
                 string tokenTimeStamp = Timestamp;
                 signGenerator.setTokenTimestamp(tokenTimeStamp);
-                log.Debug("token = " + tokenAuth.AccessToken + " tokenSecret=" + tokenAuth.TokenSecret + " uri=" + endpointURL);
+                log.Debug("token = " + toknAuthorization.AccessToken + " tokenSecret=" + toknAuthorization.TokenSecret + " uri=" + endpointURL);
                 signGenerator.setRequestURI(endpointURL);
 
                 //Compute Signature
                 string sign = signGenerator.ComputeSignature();
                 log.Debug("Permissions signature: " + sign);
-                string authorization = "token=" + tokenAuth.AccessToken + ",signature=" + sign + ",timestamp=" + tokenTimeStamp;
+                string authorization = "token=" + toknAuthorization.AccessToken + ",signature=" + sign + ",timestamp=" + tokenTimeStamp;
                 log.Debug("Authorization string: " + authorization);
                 headers.Add(BaseConstants.PAYPAL_AUTHORIZATION_PLATFORM, authorization);
             }

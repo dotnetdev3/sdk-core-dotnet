@@ -47,8 +47,8 @@ namespace PayPal.Manager
         /// <returns></returns>
         private string GetDefaultAccountName()
         {
-            ConfigManager configMgr = ConfigManager.Instance;
-            Account firstAccount = configMgr.GetAccount(0);
+            ConfigManager configMngr = ConfigManager.Instance;
+            Account firstAccount = configMngr.GetAccount(0);
             if (firstAccount == null)
             {
                 throw new MissingCredentialException("No accounts configured for API call");
@@ -69,8 +69,8 @@ namespace PayPal.Manager
             }
            
             ICredential credential = null;
-            ConfigManager configManager = ConfigManager.Instance;
-            Account accnt = configManager.GetAccount(apiUserName);
+            ConfigManager configMngr = ConfigManager.Instance;
+            Account accnt = configMngr.GetAccount(apiUserName);
             if (accnt == null)
             {
                 throw new MissingCredentialException("Missing credentials for " + apiUserName);

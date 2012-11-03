@@ -209,22 +209,22 @@ namespace PayPal.NVP
 
             try
             {
-                CredentialManager credentialManager = CredentialManager.Instance;
-                returnCredential = credentialManager.GetCredentials(apiUsername);
+                CredentialManager credentialMngr = CredentialManager.Instance;
+                returnCredential = credentialMngr.GetCredentials(apiUsername);
 
                 if (!string.IsNullOrEmpty(accessToken))
                 {
-                    IThirdPartyAuthorization tokenAuth = new TokenAuthorization(accessToken, tokenSecret);
+                    IThirdPartyAuthorization toknAuthuthorization = new TokenAuthorization(accessToken, tokenSecret);
 
                     if (returnCredential is SignatureCredential)
                     {
                         SignatureCredential sigCred = (SignatureCredential)returnCredential;
-                        sigCred.ThirdPartyAuthorization = tokenAuth;
+                        sigCred.ThirdPartyAuthorization = toknAuthuthorization;
                     }
                     else if (returnCredential is CertificateCredential)
                     {
                         CertificateCredential certCred = (CertificateCredential)returnCredential;
-                        certCred.ThirdPartyAuthorization = tokenAuth;
+                        certCred.ThirdPartyAuthorization = toknAuthuthorization;
                     }
                 }
             }

@@ -52,7 +52,7 @@
     <Compile Include="Authentication\ICredential.cs" />
     <Compile Include="Authentication\SignatureCredential.cs" />
     <Compile Include="Authentication\SubjectAuthorization.cs" />
-    <Compile Include="Authentication\ThirdPartyAuthorization.cs" />
+    <Compile Include="Authentication\IThirdPartyAuthorization.cs" />
     <Compile Include="Authentication\TokenAuthorization.cs" />
     <Compile Include="DefaultSOAPAPICallHandler.cs" />
     <Compile Include="NVP\CertificateHttpHeaderAuthStrategy.cs" />

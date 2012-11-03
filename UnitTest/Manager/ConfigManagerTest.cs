@@ -10,13 +10,13 @@ namespace PayPal.UnitTest.Manager
     [TestFixture]
     class ConfigManagerTest
     {
-        ConfigManager configMgr;
+        ConfigManager configMngr;
 
         [Test]
         public void RetrieveAccountConfigByIndex()
         {
-            configMgr = ConfigManager.Instance;
-            Account acc = configMgr.GetAccount(0);
+            configMngr = ConfigManager.Instance;
+            Account acc = configMngr.GetAccount(0);
             Assert.IsNotNull(acc);
             Assert.AreEqual(UnitTestConstants.APIUserName, acc.APIUsername);
         }
@@ -24,8 +24,8 @@ namespace PayPal.UnitTest.Manager
         [Test]
         public void RetrieveAccountConfigByUsername()
         {
-            configMgr = ConfigManager.Instance;
-            Account acc = configMgr.GetAccount(UnitTestConstants.APIUserName);
+            configMngr = ConfigManager.Instance;
+            Account acc = configMngr.GetAccount(UnitTestConstants.APIUserName);
             Assert.IsNotNull(acc);
             Assert.AreEqual(UnitTestConstants.APIUserName, acc.APIUsername);
             Assert.AreEqual(UnitTestConstants.APIPassword, acc.APIPassword);
@@ -36,19 +36,19 @@ namespace PayPal.UnitTest.Manager
         [Test]
         public void RetrieveNonExistentAccount()
         {
-            configMgr = ConfigManager.Instance;
-            Account acc = configMgr.GetAccount("i-do-not-exist_api1.paypal.com");
+            configMngr = ConfigManager.Instance;
+            Account acc = configMngr.GetAccount("i-do-not-exist_api1.paypal.com");
             Assert.IsNull(acc, "Invalid account name returns null account config");
         }
 
         [Test]
         public void RetrieveValidProperty()
         {
-            configMgr = ConfigManager.Instance;
-            string endpoint = configMgr.GetProperty("endpoint");
+            configMngr = ConfigManager.Instance;
+            string endpoint = configMngr.GetProperty("endpoint");
             Assert.IsNotNull(endpoint);
             Assert.AreEqual(UnitTestConstants.APIEndpointNVP, endpoint);
-            string connectionTimeout = configMgr.GetProperty("connectionTimeout");
+            string connectionTimeout = configMngr.GetProperty("connectionTimeout");
             Assert.IsNotNull(connectionTimeout);
             Assert.AreEqual("360000", connectionTimeout);
         }
@@ -56,8 +56,8 @@ namespace PayPal.UnitTest.Manager
         [Test]
         public void RetrieveNonExistentProperty()
         {
-            configMgr = ConfigManager.Instance;
-            string endpoint = configMgr.GetProperty("endpointMisspelt");
+            configMngr = ConfigManager.Instance;
+            string endpoint = configMngr.GetProperty("endpointMisspelt");
             Assert.IsNull(endpoint);
         }
 

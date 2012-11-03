@@ -44,7 +44,6 @@ namespace PayPal.Authentication
         /// </summary>
         /// <param name="usrName"></param>
         /// <param name="pasWord"></param>
-        /// <param name="appID"></param>
         /// <param name="certFile"></param>
         /// <param name="priKeyPassword"></param>
         public CertificateCredential(string usrName, string pasWord, string certFile, string priKeyPassword) 
@@ -66,7 +65,6 @@ namespace PayPal.Authentication
         /// </summary>
         /// <param name="usrName"></param>
         /// <param name="pasWord"></param>
-        /// <param name="appID"></param>
         /// <param name="certFile"></param>
         /// <param name="priKeyPassword"></param>
         /// <param name="thrdPartyAuthorization"></param>

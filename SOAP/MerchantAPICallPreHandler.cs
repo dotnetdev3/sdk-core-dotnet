@@ -224,8 +224,8 @@ namespace PayPal.SOAP
             ICredential returnCredential = null;
             try
             {                
-                CredentialManager credentialManager = CredentialManager.Instance;
-                returnCredential = credentialManager.GetCredentials(apiUserName);
+                CredentialManager credentialMngr = CredentialManager.Instance;
+                returnCredential = credentialMngr.GetCredentials(apiUserName);
 
                 if (!string.IsNullOrEmpty(accessToken))
                 {
