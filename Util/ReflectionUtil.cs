@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
 
 namespace PayPal.Util
@@ -16,10 +15,10 @@ namespace PayPal.Util
         public static Dictionary<string, string> decodeResponseObject(object responseType, string prefix)
         {
             Dictionary<string, string> returnDictionary = new Dictionary<string, string>();
-            Dictionary<string, object> rDictionary = ReflectionUtil.generateMapFromResponse(responseType, "");
-            if (rDictionary != null && rDictionary.Count > 0)
+            Dictionary<string, object> responseDictionary = ReflectionUtil.generateMapFromResponse(responseType, string.Empty);
+            if (responseDictionary != null && responseDictionary.Count > 0)
             {
-                foreach(KeyValuePair<string, object> pair in rDictionary)
+                foreach(KeyValuePair<string, object> pair in responseDictionary)
                 {
                     returnDictionary.Add(pair.Key, pair.Value.ToString());
                 }
@@ -35,33 +34,32 @@ namespace PayPal.Util
                 return null;
             }
             Dictionary<string, object> responseDictionary = new Dictionary<string,object>();
-
             Dictionary<string, object> returnDictionary;
             object returnObject;
 
-            Type klazzType = responseType.GetType();
-            MethodInfo[] methodInfo = klazzType.GetMethods();
-            string nameSpace;
+            Type currentType = responseType.GetType();
+            MethodInfo[] methods = currentType.GetMethods();
+            string nameSpce;
             string propertyName;
-            foreach (MethodInfo mInfo in methodInfo)
+            foreach (MethodInfo method in methods)
             {
-                if (mInfo.Name.StartsWith("get_"))
+                if (method.Name.StartsWith("get_"))
                 {
-                    nameSpace = mInfo.ReturnType.Namespace;
+                    nameSpce = method.ReturnType.Namespace;
                     if (prefix.Length != 0)
                     {
                         propertyName = prefix + "."
-                                + mInfo.Name.Substring(4);
+                                + method.Name.Substring(4);
                     }
                     else
                     {
-                        propertyName = mInfo.Name.Substring(4);
+                        propertyName = method.Name.Substring(4);
                     }
-                    if (nameSpace != null)
+                    if (nameSpce != null)
                     {
-                        if (!nameSpace.StartsWith("PayPal"))
+                        if (!nameSpce.StartsWith("PayPal"))
                         {
-                            returnObject = mInfo.Invoke(responseType, null);
+                            returnObject = method.Invoke(responseType, null);
                             if (returnObject != null && returnObject.GetType().IsGenericType)
                             {
                                 System.Collections.IList list = (System.Collections.IList)returnObject;
@@ -93,7 +91,7 @@ namespace PayPal.Util
                             }
                             else if (returnObject != null)
                             {
-                                if (klazzType.Name.EndsWith("ErrorParameter") &&
+                                if (currentType.Name.EndsWith("ErrorParameter") &&
                                     propertyName.EndsWith("value"))
                                 {
                                     propertyName = propertyName.Substring(0, propertyName.LastIndexOf("."));
@@ -104,8 +102,8 @@ namespace PayPal.Util
                         }
                         else
                         {
-                            returnObject = mInfo.Invoke(responseType, null);
-                            if (returnObject != null && mInfo.ReturnType.IsEnum)
+                            returnObject = method.Invoke(responseType, null);
+                            if (returnObject != null && method.ReturnType.IsEnum)
                             {
                                 //To be coded
                             }
@@ -126,7 +124,7 @@ namespace PayPal.Util
                     }
                     else
                     {
-                        responseDictionary.Add(propertyName, mInfo.Invoke(responseType, null));
+                        responseDictionary.Add(propertyName, method.Invoke(responseType, null));
                     }
 
                 }

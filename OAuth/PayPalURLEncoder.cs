@@ -1,77 +1,68 @@
 using System;
-using System.Data;
-using System.Configuration;
-using System.Web;
-using System.Web.Security;
 using System.Text;
-
 
 namespace PayPal.OAuth
 {
-    
     public class PayPalURLEncoder
     {
         public const string digits = "0123456789abcdef";
 
-        public static string Encode(string s, string enc)
+        public static string Encode(string message, string name)
         {
-            if (s == null || enc == null)
+            if (message == null || name == null)
             {
                 throw new NullReferenceException();
             }
-            StringBuilder buf = new StringBuilder(s.Length + 16);
+            StringBuilder builder = new StringBuilder(message.Length + 16);
             int start = -1;
 
-            for (int i = 0; i < s.Length; i++) {
-                char ch = s[i];
+            for (int i = 0; i < message.Length; i++)
+            {
+                char ch = message[i];
                 if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')
                     || (ch >= '0' && ch <= '9') || " _".IndexOf(ch) > -1) //removed "." and "-" and "*"
-                { 
-
-                    if (start >= 0) 
+                {
+                    if (start >= 0)
                     {
-                        Convert(s.Substring(start, (i-start)), buf, enc);
+                        Convert(message.Substring(start, (i - start)), builder, name);
                         start = -1;
                     }
-                    if (ch != ' ') 
+                    if (ch != ' ')
                     {
-                        buf.Append(ch);
+                        builder.Append(ch);
                     }
-                    else 
+                    else
                     {
-                        buf.Append('+');
+                        builder.Append('+');
                     }
-                } 
-                else 
+                }
+                else
                 {
-                    if (start < 0) 
+                    if (start < 0)
                     {
                         start = i;
                     }
                 }
             }
-            if (start >= 0) 
+            if (start >= 0)
             {
-                Convert(s.Substring(start, (s.Length-start)), buf, enc);
+                Convert(message.Substring(start, (message.Length - start)), builder, name);
             }
 
-            return buf.ToString(0,buf.Length);
+            return builder.ToString(0, builder.Length);
         }
 
-
-        private static void Convert(string s, StringBuilder buf, string enc)
+        private static void Convert(string message, StringBuilder builder, string name)
         {
-            Encoding encoding = System.Text.Encoding.GetEncoding(enc);
-            byte[] bytes = encoding.GetBytes(s);
+            Encoding encoding = System.Text.Encoding.GetEncoding(name);
+            byte[] bytes = encoding.GetBytes(message);
 
             for (int j = 0; j < bytes.Length; j++)
             {
-                buf.Append('%');
-                buf.Append(digits[((bytes[j] & 0xf0) >> 4)]);
-                buf.Append(digits[(bytes[j] & 0xf)]);
+                builder.Append('%');
+                builder.Append(digits[((bytes[j] & 0xf0) >> 4)]);
+                builder.Append(digits[(bytes[j] & 0xf)]);
             }
         }
-
     }
-
 }

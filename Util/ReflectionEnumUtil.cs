@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
 
 namespace PayPal.Util
@@ -9,7 +8,7 @@ namespace PayPal.Util
     {
         public static string getDescription(Enum value)
         {
-            string description = "";
+            string description = string.Empty;
             DescriptionAttribute[] attributes = (DescriptionAttribute[])value.GetType().GetField(value.ToString()).GetCustomAttributes(typeof(DescriptionAttribute), false);
             if (attributes.Length > 0)
             {

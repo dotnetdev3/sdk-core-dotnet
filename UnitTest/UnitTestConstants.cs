@@ -17,7 +17,7 @@ namespace PayPal.UnitTest
         public const string PayloadNVP = @"requestEnvelope.errorLanguage=en_US&baseAmountList.currency(0).code=USD&baseAmountList.currency(0).amount=2.0&convertToCurrencyList.currencyCode(0)=GBP";
         public const string PayloadSOAP = @"<ns:GetBalanceReq><ns:GetBalanceRequest><ebl:Version>94.0</ebl:Version></ns:GetBalanceRequest></ns:GetBalanceReq>";
 
-        public const string CertificatePath = @"C:\Github_PayPal_Core_WIP\sdk-core\DOTNET\UnitTest\Resources\sdk-cert.p12";
+        public const string CertificatePath = @"C:\Github_PayPal_Core\sdk-core\DOTNET\UnitTest\Resources\sdk-cert.p12";
         public const string CertificatePassword = "password";
     }
 }

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Web;
 
 namespace PayPal.Util
@@ -10,18 +8,18 @@ namespace PayPal.Util
         /// <summary>
         /// Split a Name Value formatted string into a dictionary
         /// </summary>
-        /// <param name="nvpStr"></param>
+        /// <param name="nvpString"></param>
         /// <returns></returns>
-        public Dictionary<string, string> ParseNVPString(string nvpStr)
+        public Dictionary<string, string> ParseNVPString(string nvpString)
         {
             Dictionary<string, string> nvpMap = new Dictionary<string, string>();
-            string[] keyValuePairs = nvpStr.Split('&');
+            string[] keyValuePairs = nvpString.Split('&');
             foreach (string pair in keyValuePairs)
             {
                 string[] keyValue = pair.Split('=');
                 if (keyValue.Length == 2)
                 {
-                    nvpMap.Add(keyValue[0], HttpUtility.UrlDecode(keyValue[1], BaseConstants.ENCODING_FORMAT) );
+                    nvpMap.Add(keyValue[0], HttpUtility.UrlDecode(keyValue[1], BaseConstants.ENCODING_FORMAT));
                 }
             }
             return nvpMap;
