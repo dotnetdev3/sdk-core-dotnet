@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="README.md" />
     <None Include="Resources\sdk-cert.p12" />
   </ItemGroup>
   <ItemGroup>
